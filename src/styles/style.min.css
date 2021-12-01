@@ -1,0 +1,243 @@
+* {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+.wrapper {
+  position: relative;
+  width: 460px;
+  height: 120px;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+  overflow: hidden;
+}
+
+.wrapper .authorize {
+  position: absolute;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+  height: 100%;
+  background: #191414;
+  z-index: 10;
+  border-bottom: 2px solid white;
+}
+
+.wrapper .authorize .spotify-logo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100px;
+  margin: 12px;
+}
+
+.wrapper .authorize .login-container {
+  margin: 6px 0;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: default;
+}
+
+.wrapper .authorize .login-container .authorize__btn {
+  position: relative;
+  font-weight: 600;
+  color: #1DB954;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.wrapper .authorize .login-container .authorize__btn:after {
+  background: none repeat scroll 0 0 transparent;
+  bottom: -2px;
+  content: "";
+  display: block;
+  height: 2px;
+  left: 0;
+  position: absolute;
+  background: #1DB954;
+  -webkit-transition: width 0.3s ease 0s, left 0.3s ease 0s;
+  transition: width 0.3s ease 0s, left 0.3s ease 0s;
+  width: 0;
+}
+
+.wrapper .authorize .login-container .authorize__btn:hover:after {
+  width: 100%;
+  left: 0;
+}
+
+.wrapper .spotify-opener {
+  display: -ms-grid;
+  display: grid;
+  place-items: center;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  z-index: 10;
+  background: rgba(25, 20, 20, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-family: 'Inter', sans-serif;
+}
+
+.wrapper .spotify-opener .opener-description {
+  opacity: 0.9;
+}
+
+.wrapper .spotify-opener a:link {
+  color: #1DB954;
+}
+
+.wrapper .spotify-opener a:visited {
+  color: #1DB954;
+}
+
+.wrapper .spotify-opener a:hover {
+  color: #1DB954;
+}
+
+.wrapper .spotify-opener a:active {
+  color: #1DB954;
+}
+
+.wrapper .main {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  padding: 8px;
+}
+
+.wrapper .main .album-cover {
+  position: relative;
+  width: 104px;
+  height: 104px;
+  min-width: 104px;
+  -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+.wrapper .main .album-cover img {
+  -o-object-fit: cover;
+     object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.wrapper .main .section {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: 4px 0;
+}
+
+.wrapper .main .section .song {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  margin-left: 12px;
+}
+
+.wrapper .main .section .song .song__name {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  overflow: hidden;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.wrapper .main .section .song .song__artists {
+  font-family: 'Roboto', sans-serif;
+  font-style: italic;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.65);
+  margin-top: 2px;
+}
+
+.wrapper .main .section .song .song__underline {
+  width: 100%;
+  height: 2px;
+  background: #0ebb4b;
+  background: black;
+  background: -webkit-gradient(linear, left top, right top, from(#0ebb4b), to(transparent));
+  background: linear-gradient(90deg, #0ebb4b, transparent);
+  margin: 4px 0;
+}
+
+.wrapper .main .section .controllers {
+  width: 100%;
+  margin-top: auto;
+  margin-left: 12px;
+}
+
+.wrapper .main .section .controllers .controllers-group {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 26px;
+}
+
+.wrapper .main .section .controllers .controllers-group .controllers__btn {
+  display: -ms-grid;
+  display: grid;
+  place-items: center;
+  outline: none;
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 18px;
+  margin: 0 6px;
+}
+
+.wrapper .main .section .controllers .controllers-group .controllers__btn--svg {
+  position: relative;
+  width: 15px;
+}
+
+.wrapper .main .section .controllers .controllers-group .controllers__btn--svg svg {
+  height: 100%;
+  max-height: 100%;
+  width: 100%;
+}
+
+.wrapper .main .section .controllers .controllers-group .controllers__btn--middle {
+  font-size: 26px;
+}
