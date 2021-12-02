@@ -10,6 +10,8 @@ import { refreshToken } from "./utils/refreshToken.js"
 import { activateDevice } from "./utils/activateDevice.js"
 import { ListenForDevice } from "./utils/listenForDevice.js"
 import { sleep } from "./utils/sleep.js"
+import { playIcon, pauseIcon } from "./utils/svgIcons.js"
+import { setRepeat } from "./utils/api/setRepeat.js"
 // import { ACCESS_TOKEN, REFRESH_TOKEN } from "./background.js"
 let ACCESS_TOKEN = "";
 let REFRESH_TOKEN = "";
@@ -26,11 +28,18 @@ const prevTrackBtn = document.querySelector("[data-js=prev-track]")
 const stopTrackBtn = document.querySelector("[data-js=stop-track]")
 const nextTrackBtn = document.querySelector("[data-js=next-track]")
 const shuffleBtn = document.querySelector("[data-js=shuffle-btn]")
-const shuffleSvg = document.querySelector("[data-js=shuffle-svg]")
+const repeatBtn = document.querySelector("[data-js=repeat-btn]")
+const shuffleIcon = document.querySelector("[data-js=shuffle-icon]")
+const shuffleBlob = document.querySelector("[data-js=shuffle-blob]")
+const repeatIcon = document.querySelector("[data-js=repeat-icon]")
+const repeatBlob = document.querySelector("[data-js=repeat-blob]")
+const repeatTrackBlob = document.querySelector("[data-js=repeat-track-blob]")
+
 
 // GLOBAL VARS
 let isPlaying = false;
 let isShuffle = false;
+let repeatState = "off";
 let currentTrackId = "";
 // In some places we are re-invoking/recursing the same function
 // So we keep this counter and when it gets too high we should stop
@@ -77,7 +86,7 @@ const CurrentTrackState = async (devices) => {
   // UPDATE CONTROLLERS DOM
   isPlaying = data.is_playing
 
-  const dom = { toggleTrackIcon }
+  const dom = { stopTrackBtn }
   const state = { isPlaying }
 
   updateControllerDOM({ state, dom })
@@ -115,10 +124,10 @@ const SpotifyControllers = () => {
     isSubmitting = true;
 
     if (isPlaying) {
-      toggleTrackIcon.classList = "fas fa-play-circle"
+      stopTrackBtn.innerHTML = playIcon();
       isSubmitting = await togglePlay("pause", ACCESS_TOKEN);
     } else {
-      toggleTrackIcon.classList = "fas fa-pause-circle"
+      stopTrackBtn.innerHTML = pauseIcon();
       isSubmitting = await togglePlay("play", ACCESS_TOKEN);
     }
     isPlaying = !isPlaying;
@@ -130,14 +139,43 @@ const SpotifyControllers = () => {
     isSubmitting = true;
 
     if (isShuffle) {
-      shuffleSvg.style.fill = "#ffffff";
+      shuffleIcon.style.stroke = "";
+      shuffleBlob.style.display = "";
       isSubmitting = await toggleShuffle(false, ACCESS_TOKEN);
     } else {
-      shuffleSvg.style.fill = "#1DB954";
+      shuffleIcon.style.stroke = "#1DB954";
+      shuffleBlob.style.display = "block";
       isSubmitting = await toggleShuffle(true, ACCESS_TOKEN);
     }
     isShuffle = !isShuffle;
   })
+
+  repeatBtn.addEventListener("click", async () => {
+    if (isSubmitting) return;
+    isSubmitting = true;
+
+    if (repeatState === "off") {
+      repeatIcon.style.stroke = "#1DB954";
+      repeatBlob.style.display = "block";
+
+      isSubmitting = await setRepeat("context", ACCESS_TOKEN)
+      repeatState = "context"
+    } else if (repeatState === "context") {
+      repeatTrackBlob.style.display = "grid"
+
+      isSubmitting = await setRepeat("track", ACCESS_TOKEN)
+      repeatState = "track"
+    } else {
+      repeatIcon.style.stroke = "";
+      repeatBlob.style.display = "";
+      repeatTrackBlob.style.display = ""
+
+      isSubmitting = await setRepeat("off", ACCESS_TOKEN)
+      repeatState = "off"
+    }
+
+  })
+
 }
 
 // Logs in user automatically when page loads
