@@ -25,6 +25,7 @@ export const updateSongDOM = (data) => {
   }
 
   function setColor(color) {
-    mainContainer.style.background = `linear-gradient(90deg, rgb(${color[0]},${color[1]},${color[2]}) 0%, rgb(25,20,20) 80%)`
+    //mainContainer.style.background = `linear-gradient(90deg, rgb(${color[0]},${color[1]},${color[2]}) 0%, rgb(25,20,20) 80%)`
+    mainContainer.style.background = `rgb(${color[0]},${color[1]},${color[2]})`
   }
 }
