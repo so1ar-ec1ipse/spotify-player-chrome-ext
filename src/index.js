@@ -4,6 +4,7 @@ import { checkDeviceStatus } from "./utils/checkDeviceStatus.js"
 import { spotifyNotOpenError } from "./utils/spotifyNotOpenError.js"
 import { updateSongDOM } from "./utils/updateSongDOM.js"
 import { updateControllerDOM } from "./utils/updateControllerDOM.js"
+import { toggleShuffle } from "./utils/api/toggleShuffle.js"
 // import { verifyAccess } from "./utils/verifyAccess.js"
 import { refreshToken } from "./utils/refreshToken.js"
 import { activateDevice } from "./utils/activateDevice.js"
@@ -26,6 +27,7 @@ const shuffleBtn = document.querySelector("[data-js=shuffle-btn]")
 
 // GLOBAL VARS
 let isPlaying = false;
+let isShuffle = false;
 let currentTrackId = "";
 let localUpdate = false;
 let authoAuthOFailed = false; // failsafe if refreshtoken fails
@@ -76,6 +78,7 @@ const CurrentTrackState = async (devices) => {
 
   // UPDATE CONTROLLERS DOM
   isPlaying = data.is_playing
+  console.log(data)
 
   const dom = { toggleTrackIcon }
   const state = { isPlaying }
@@ -110,6 +113,9 @@ const SpotifyControllers = () => {
   })
   nextTrackBtn.addEventListener("click", async () => {
     skipTrack("next", ACCESS_TOKEN);
+  })
+  shuffleBtn.addEventListener("click", async () => {
+    toggleShuffle(true, ACCESS_TOKEN);
   })
 }
 

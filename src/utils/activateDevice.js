@@ -20,6 +20,7 @@ export const activateDevice = async (ACCESS_TOKEN, REFRESH_TOKEN, devices) => {
 
   const data = await res.json();
 
+  console.log(data)
   // Device not found
   if (data.error && data.error.status === 404) {
     const devices = await checkDeviceStatus(ACCESS_TOKEN, REFRESH_TOKEN)
