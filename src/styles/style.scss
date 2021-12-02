@@ -118,7 +118,8 @@
       flex-direction: column;
       width: 100%;
       height: 100%;
-      padding: 4px 0;
+      // padding: 4px 0;
+      padding-top: 4px;
       .song {
         display: flex;
         flex-direction: column;
@@ -156,7 +157,7 @@
         .controllers-group {
           display: flex;
           align-items: center;
-          height: 26px;
+          height: 32px;
           .controllers__btn {
             display: grid;
             place-items: center;
@@ -165,12 +166,12 @@
             border: none;
             color: white;
             font-size: 18px;
-            margin: 0 6px;
+            padding: 0 6px;
+            height: 100%;
           }
           .controllers__btn--svg {
             position: relative;
-            // height: 100%;
-            width: 15px;
+            width: 26px;
             svg {
               height: 100%;
               max-height: 100%;

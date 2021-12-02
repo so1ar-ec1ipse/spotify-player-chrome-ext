@@ -27,7 +27,7 @@ export const refreshToken = async (REFRESH_TOKEN) => {
 
   chrome.storage.sync.set({ "ACCESS_TOKEN": resData.access_token });
   if (resData.refresh_token) {
-    chrome.storage.sync.set({ "REFRESH_TOKEN": REFRESH_TOKEN });
+    chrome.storage.sync.set({ "REFRESH_TOKEN": resData.refresh_token });
   }
 
   return true;

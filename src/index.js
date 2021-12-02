@@ -8,6 +8,8 @@ import { toggleShuffle } from "./utils/api/toggleShuffle.js"
 // import { verifyAccess } from "./utils/verifyAccess.js"
 import { refreshToken } from "./utils/refreshToken.js"
 import { activateDevice } from "./utils/activateDevice.js"
+import { ListenForDevice } from "./utils/listenForDevice.js"
+import { sleep } from "./utils/sleep.js"
 // import { ACCESS_TOKEN, REFRESH_TOKEN } from "./background.js"
 let ACCESS_TOKEN = "";
 let REFRESH_TOKEN = "";
@@ -24,18 +26,20 @@ const prevTrackBtn = document.querySelector("[data-js=prev-track]")
 const stopTrackBtn = document.querySelector("[data-js=stop-track]")
 const nextTrackBtn = document.querySelector("[data-js=next-track]")
 const shuffleBtn = document.querySelector("[data-js=shuffle-btn]")
+const shuffleSvg = document.querySelector("[data-js=shuffle-svg]")
 
 // GLOBAL VARS
 let isPlaying = false;
 let isShuffle = false;
 let currentTrackId = "";
-let localUpdate = false;
-let authoAuthOFailed = false; // failsafe if refreshtoken fails
-let deviceNotFound = false;
+// In some places we are re-invoking/recursing the same function
+// So we keep this counter and when it gets too high we should stop
+// To avoid infinite fetch requests
+let invokeStateCount = 0;
 
 // Get track state
 const CurrentTrackState = async (devices) => {
-  if (authoAuthOFailed || deviceNotFound) return;
+  if (invokeStateCount >= 5) return
 
   const res = await fetch("https://api.spotify.com/v1/me/player/currently-playing", {
     method: "GET",
@@ -51,16 +55,11 @@ const CurrentTrackState = async (devices) => {
     // This function activates device
     const findDevices = await activateDevice(ACCESS_TOKEN, REFRESH_TOKEN, devices)
     if (findDevices && findDevices.length === 0) {
-      spotifyNotOpenError(true);
-      deviceNotFound = true;
-      // This function will await forever until user opens spotify!
-      devices = await ListenForSpotifyToOpen(ACCESS_TOKEN, REFRESH_TOKEN)
-      spotifyNotOpenError(false)
-      deviceNotFound = false;
-    } else {
-      devices = findDevices
+      return spotifyNotOpenError(true);
     }
-    return
+    await sleep(1000);
+    invokeStateCount++;
+    return CurrentTrackState(devices)
   }
 
   const data = await res.json();
@@ -69,16 +68,14 @@ const CurrentTrackState = async (devices) => {
     // GENERATE NEW TOKEN
     const wasSuccessful = await refreshToken(REFRESH_TOKEN);
     if (wasSuccessful) {
+      invokeStateCount++;
       return CurrentTrackState(devices)
     }
-    // If we could not refresh token
-    return authoAuthOFailed = true;
+    return authorizeContianer.style.display = "grid"; // make user login manually
   }
-  if (localUpdate) return; // When updating state on the popup extension, we dont want to update below vars
 
   // UPDATE CONTROLLERS DOM
   isPlaying = data.is_playing
-  console.log(data)
 
   const dom = { toggleTrackIcon }
   const state = { isPlaying }
@@ -86,52 +83,62 @@ const CurrentTrackState = async (devices) => {
   updateControllerDOM({ state, dom })
 
   // UPDATE SONG DOM
-  if (currentTrackId !== data.item.uri) {
-    currentTrackId = data.item.uri
-    updateSongDOM(data)
-  }
+  currentTrackId = data.item.uri
+  updateSongDOM(data)
 }
 
 const SpotifyControllers = () => {
+  let isSubmitting = false;
 
+  // PREVIOUS TRACK
   prevTrackBtn.addEventListener("click", async () => {
-    skipTrack("previous", ACCESS_TOKEN);
-  })
-  stopTrackBtn.addEventListener("click", async () => {
-    if (isPlaying) {
-      togglePlay("pause", ACCESS_TOKEN);
-      isPlaying = false;
-      toggleTrackIcon.classList = isPlaying ? "fas fa-pause-circle" : "fas fa-play-circle"
-    } else {
-      togglePlay("play", ACCESS_TOKEN);
-      isPlaying = true;
-      toggleTrackIcon.classList = isPlaying ? "fas fa-pause-circle" : "fas fa-play-circle"
-    }
+    if (isSubmitting) return;
+    isSubmitting = true;
 
-    localUpdate = true;
-    setTimeout(() => localUpdate = false, 1000)
+    isSubmitting = await skipTrack("previous", ACCESS_TOKEN);
+    await sleep(300)
+    CurrentTrackState()
   })
+  // NEXT TRACK
   nextTrackBtn.addEventListener("click", async () => {
-    skipTrack("next", ACCESS_TOKEN);
+    if (isSubmitting) return;
+    isSubmitting = true;
+
+    isSubmitting = await skipTrack("next", ACCESS_TOKEN);
+    await sleep(300)
+    CurrentTrackState()
   })
+
+  // TOGGLE STOP/PLAY
+  stopTrackBtn.addEventListener("click", async () => {
+    if (isSubmitting) return;
+    isSubmitting = true;
+
+    if (isPlaying) {
+      toggleTrackIcon.classList = "fas fa-play-circle"
+      isSubmitting = await togglePlay("pause", ACCESS_TOKEN);
+    } else {
+      toggleTrackIcon.classList = "fas fa-pause-circle"
+      isSubmitting = await togglePlay("play", ACCESS_TOKEN);
+    }
+    isPlaying = !isPlaying;
+  })
+
+  // TOGGLE SHUFFLE
   shuffleBtn.addEventListener("click", async () => {
-    toggleShuffle(true, ACCESS_TOKEN);
+    if (isSubmitting) return;
+    isSubmitting = true;
+
+    if (isShuffle) {
+      shuffleSvg.style.fill = "#ffffff";
+      isSubmitting = await toggleShuffle(false, ACCESS_TOKEN);
+    } else {
+      shuffleSvg.style.fill = "#1DB954";
+      isSubmitting = await toggleShuffle(true, ACCESS_TOKEN);
+    }
+    isShuffle = !isShuffle;
   })
 }
-
-
-async function ListenForSpotifyToOpen() {
-  return await new Promise((resolve) => {
-    const interval = setInterval(async () => {
-      const devices = await checkDeviceStatus(ACCESS_TOKEN, REFRESH_TOKEN)
-      if (devices && devices.length > 0) {
-        clearInterval(interval);
-        resolve(devices);
-      }
-    }, 1000);
-  });
-};
-
 
 // Logs in user automatically when page loads
 window.addEventListener("load", () => {
@@ -149,8 +156,6 @@ loginBtn.addEventListener("click", function () {
     if (response.message === "success") {
       ACCESS_TOKEN = response.ACCESS_TOKEN
       REFRESH_TOKEN = response.REFRESH_TOKEN
-      authoAuthOFailed = false;
-      deviceNotFound = false;
 
       prepareInit(ACCESS_TOKEN, REFRESH_TOKEN)
     }
@@ -163,9 +168,14 @@ async function prepareInit(ACCESS_TOKEN, REFRESH_TOKEN) {
     let devices = await checkDeviceStatus(ACCESS_TOKEN, REFRESH_TOKEN);
     if (devices && devices.length === 0) {
       spotifyNotOpenError(true)
-      // This function will await forever until user opens spotify!
-      devices = await ListenForSpotifyToOpen(ACCESS_TOKEN, REFRESH_TOKEN)
+
+      // Listen for a device for 5 seconds, if still no app is running, return script
+      // This is useful if user opens spotify and extension at the same time
+      // We want to make sure we wait until spotify is detected
+      const foundADevice = await ListenForDevice(5000, ACCESS_TOKEN, REFRESH_TOKEN);
+      if (!foundADevice) return
       spotifyNotOpenError(false)
+      devices = foundADevice
     }
 
     initPlayer(devices)
@@ -175,9 +185,6 @@ async function prepareInit(ACCESS_TOKEN, REFRESH_TOKEN) {
 // Init player
 function initPlayer(devices) {
   CurrentTrackState(devices)
-  setInterval(() => {
-    CurrentTrackState(devices);
-  }, 1000);
   SpotifyControllers();
   authorizeContianer.style.display = "none"
 }

@@ -9,7 +9,7 @@ export const updateSongDOM = (data) => {
     commaSeperatedArtists += `${obj.name}${idx === data.item.artists.length - 1 ? "" : ","} `
   })
 
-  albumCover.src = data.item.album.images[0].url;
+  albumCover.src = data.item.album.images.length > 1 ? data.item.album.images[1].url : data.item.album.images[0].url
   songName.innerText = data.item.name;
   songArtists.innerText = commaSeperatedArtists;
 

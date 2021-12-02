@@ -6,4 +6,6 @@ export const toggleShuffle = async (bool, ACCESS_TOKEN) => {
       "Content-Type": "Content-Type: application/json"
     }
   })
+
+  return false;
 }

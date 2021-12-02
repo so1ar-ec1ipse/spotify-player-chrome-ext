@@ -6,4 +6,6 @@ export const togglePlay = async (action, ACCESS_TOKEN) => {
       "Content-Type": "Content-Type: application/json"
     }
   })
+
+  return false;
 }
