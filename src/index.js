@@ -63,11 +63,13 @@ let currentTrackId = "";
 // To avoid infinite fetch requests
 let invokeStateCount = 0;
 
+let playingType = ""; // either "track" or episode
+
 // Get track state
 const CurrentTrackState = async (devices) => {
   if (invokeStateCount >= 5) return
 
-  const res = await fetch("https://api.spotify.com/v1/me/player", {
+  const res = await fetch("https://api.spotify.com/v1/me/player?additional_types=track,episode", {
     method: "GET",
     headers: {
       "Authorization": `Bearer ${ACCESS_TOKEN}`,
@@ -88,6 +90,14 @@ const CurrentTrackState = async (devices) => {
   }
 
   const data = await res.json();
+
+  playingType = data.currently_playing_type;
+
+  if (playingType === "unknown") {
+    await sleep(1000);
+    invokeStateCount++;
+    return CurrentTrackState(devices)
+  }
 
   // Check if song is the same
   if (data && data.item && currentTrackId === data.item.id) {
@@ -114,19 +124,20 @@ const CurrentTrackState = async (devices) => {
   isShuffle = data.shuffle_state;
   repeatState = data.repeat_state;
   currentVolume = data.device.volume_percent;
+  console.log(data)
   isLiked = await checkIfTrackIsSaved(data.item.id, ACCESS_TOKEN);
 
   const dom = {
-    stopTrackBtn, shuffleIcon, shuffleBlob, repeatIcon, repeatBlob, repeatTrackBlob,
+    stopTrackBtn, shuffleIcon, shuffleBtn, shuffleBlob, repeatIcon, repeatBlob, repeatTrackBlob, repeatBtn,
     musicWave, musicBullet, heartBtn, volumeInput, animateVolume, animateVolumeFill,
   }
   const state = { isPlaying, isShuffle, repeatState, isLiked, currentVolume }
 
-  updateControllerDOM({ state, dom })
+  updateControllerDOM({ state, dom }, playingType)
 
   // UPDATE SONG DOM
   currentTrackId = data.item.id
-  updateSongDOM(data)
+  updateSongDOM(data, playingType)
 
   // Hide loader
   spotifyNotOpenError(false)
@@ -142,7 +153,7 @@ const SpotifyControllers = () => {
     isSubmitting = true;
 
     isSubmitting = await skipTrack("previous", ACCESS_TOKEN);
-    await sleep(300)
+    await sleep(playingType === "track" ? 300 : 1000)
     CurrentTrackState()
   })
   // NEXT TRACK
@@ -151,7 +162,7 @@ const SpotifyControllers = () => {
     isSubmitting = true;
 
     isSubmitting = await skipTrack("next", ACCESS_TOKEN);
-    await sleep(300)
+    await sleep(playingType === "track" ? 300 : 1000)
     CurrentTrackState()
   })
 

@@ -2,7 +2,17 @@
 import { setVolumeIcon } from "./setVolumeIcon.js";
 import { playIcon, pauseIcon, unlikeIcon, likeIcon } from "./svgIcons.js";
 
-export const updateControllerDOM = ({ state, dom }) => {
+export const updateControllerDOM = ({ state, dom }, playingType) => {
+
+  if (playingType === "episode") {
+    dom.shuffleBtn.disabled = true
+    dom.repeatBtn.disabled = true
+    dom.heartBtn.disabled = true
+
+    dom.shuffleBtn.style.cursor = "not-allowed"
+    dom.repeatBtn.style.cursor = "not-allowed"
+    dom.heartBtn.style.cursor = "not-allowed"
+  }
 
   dom.stopTrackBtn.innerHTML = state.isPlaying ? pauseIcon() : playIcon();
 

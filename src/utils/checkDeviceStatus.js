@@ -1,4 +1,5 @@
 import { refreshToken } from "./refreshToken.js"
+import { sleep } from "./sleep.js"
 let authoAuthOFailed = false; // failsafe if refreshtoken fails
 
 export const checkDeviceStatus = async (ACCESS_TOKEN, REFRESH_TOKEN) => {
@@ -13,6 +14,7 @@ export const checkDeviceStatus = async (ACCESS_TOKEN, REFRESH_TOKEN) => {
   })
   const data = await res.json()
 
+  console.log(data)
   if (data.error && data.error.status === 401) {
     // GENERATE NEW TOKEN
     console.log("OLD ACCESS_TOKEN: " + ACCESS_TOKEN)
@@ -20,6 +22,7 @@ export const checkDeviceStatus = async (ACCESS_TOKEN, REFRESH_TOKEN) => {
     if (wasSuccessful) {
       console.log("Was Successful!")
       // LISTEN FOR DEVICE HERE
+      await sleep(2000)
       return checkDeviceStatus(ACCESS_TOKEN, REFRESH_TOKEN)
     }
     authoAuthOFailed = true;

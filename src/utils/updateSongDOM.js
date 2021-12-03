@@ -11,12 +11,25 @@ let intervalArr = []
 
 const colorThief = new ColorThief();
 
-export const updateSongDOM = (data) => {
+export const updateSongDOM = (data, playingType) => {
 
-  albumCover.src = data.item.album.images.length > 1 ? data.item.album.images[1].url : data.item.album.images[0].url
+  if (playingType === "track") {
+    const imageUrl = data.item.album.images.filter(x => x.width === 300)[0].url
+    albumCover.src = imageUrl
+
+    songArtists.innerHTML = generateArtistsHTML(data.item.artists)
+  }
+
+  if (playingType === "episode") {
+    const imageUrl = data.item.images.filter(x => x.width === 300)[0].url
+    albumCover.src = imageUrl;
+
+    songArtists.innerHTML = `<a href="${data.item.show.external_urls.spotify}" target="_blank">${data.item.show.name}</a>`
+  }
+
   songName.innerText = data.item.name;
   songName.href = data.item.external_urls.spotify
-  songArtists.innerHTML = generateArtistsHTML(data.item.artists)
+
 
   // clear possible timeouts and intervals 
   clearSlideState();
