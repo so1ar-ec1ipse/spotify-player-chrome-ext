@@ -159,7 +159,11 @@
   outline: none;
   background-color: transparent;
   border: none;
-  padding: 8px;
+  padding: 8px 8px 8px 12px;
+}
+
+.wrapper .main .heart-btn:hover svg {
+  fill: white;
 }
 
 .wrapper .main .heart-btn svg {
@@ -169,7 +173,7 @@
 }
 
 .wrapper .main .heart-btn .like-svg {
-  fill: #1DB954;
+  fill: #1DB954 !important;
 }
 
 .wrapper .main .like-animation {
@@ -258,6 +262,8 @@
   overflow: hidden;
   white-space: nowrap;
   color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  text-decoration: none;
 }
 
 .wrapper .main .section .song .song__artists {
@@ -266,8 +272,16 @@
   font-weight: 400;
   overflow: hidden;
   white-space: nowrap;
-  color: rgba(255, 255, 255, 0.65);
   margin-top: 2px;
+  text-decoration: none;
+  cursor: default;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.wrapper .main .section .song .song__artists a {
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .wrapper .main .section .controllers {

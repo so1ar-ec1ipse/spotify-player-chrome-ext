@@ -127,14 +127,17 @@
       outline: none;
       background-color: transparent;
       border: none;
-      padding: 8px;
+      padding: 8px 8px 8px 12px;
+      &:hover svg {
+        fill: rgb(255,255,255);
+      }
       svg {
         fill: rgba(255,255,255,0.8);
         width: 20px;
         max-height: 20px;
       }
       .like-svg {
-        fill: #1DB954;
+        fill: #1DB954 !important;
         // &:active {
         //   animation: likeAnimation 1s;
         // }
@@ -191,6 +194,8 @@
           overflow: hidden;
           white-space: nowrap;
           color: rgba(255, 255, 255, 0.9);
+          cursor: pointer;
+          text-decoration: none;
         }
         .song__artists {
           font-family: 'Roboto', sans-serif;
@@ -198,8 +203,15 @@
           font-weight: 400;
           overflow: hidden;
           white-space: nowrap;
-          color: rgba(255, 255, 255, 0.65);
           margin-top: 2px;
+          text-decoration: none;
+          cursor: default;
+          color: rgba(255, 255, 255, 0.65);
+          a {
+            color: rgba(255, 255, 255, 0.65);
+            text-decoration: none;
+            cursor: pointer;
+          }
         }
       }
       .controllers {

@@ -12,14 +12,11 @@ let intervalArr = []
 const colorThief = new ColorThief();
 
 export const updateSongDOM = (data) => {
-  let commaSeperatedArtists = ""
-  data.item.artists.forEach((obj, idx) => {
-    commaSeperatedArtists += `${obj.name}${idx === data.item.artists.length - 1 ? "" : ","} `
-  })
 
   albumCover.src = data.item.album.images.length > 1 ? data.item.album.images[1].url : data.item.album.images[0].url
   songName.innerText = data.item.name;
-  songArtists.innerText = commaSeperatedArtists;
+  songName.href = data.item.external_urls.spotify
+  songArtists.innerHTML = generateArtistsHTML(data.item.artists)
 
   // clear possible timeouts and intervals 
   clearSlideState();
@@ -126,4 +123,14 @@ function clearSlideState() {
   songName.style.transform = ""
   songArtists.style.transform = ""
 
+}
+
+function generateArtistsHTML(artists) {
+  let html = "";
+
+  artists.forEach((artist, idx) => {
+    html += `<a href=${artist.external_urls.spotify} target="_blank">${artist.name}</a>${idx === artists.length - 1 ? "" : ", "}`
+  })
+
+  return html;
 }
