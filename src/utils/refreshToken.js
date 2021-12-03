@@ -20,6 +20,8 @@ export const refreshToken = async (REFRESH_TOKEN) => {
 
   const resData = await res.json();
 
+  console.log(resData)
+  console.log("OLD REFRESH_TOKEN: " + REFRESH_TOKEN)
   if (resData.error) {
     authorize.style.display = "grid"
     return false

@@ -15,8 +15,11 @@ export const checkDeviceStatus = async (ACCESS_TOKEN, REFRESH_TOKEN) => {
 
   if (data.error && data.error.status === 401) {
     // GENERATE NEW TOKEN
+    console.log("OLD ACCESS_TOKEN: " + ACCESS_TOKEN)
     const wasSuccessful = await refreshToken(REFRESH_TOKEN);
     if (wasSuccessful) {
+      console.log("Was Successful!")
+      // LISTEN FOR DEVICE HERE
       return checkDeviceStatus(ACCESS_TOKEN, REFRESH_TOKEN)
     }
     authoAuthOFailed = true;

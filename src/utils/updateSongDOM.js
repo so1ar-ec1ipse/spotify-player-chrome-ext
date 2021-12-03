@@ -4,8 +4,12 @@ const songArtists = document.querySelector("[data-js=song__artists]")
 const mainContainer = document.querySelector("[data-js=main]")
 const song = document.querySelector("[data-js=song]")
 
+const fillVolume = document.querySelector("[data-js=fill-volume]")
+
 let timeoutArr = []
 let intervalArr = []
+
+const colorThief = new ColorThief();
 
 export const updateSongDOM = (data) => {
   let commaSeperatedArtists = ""
@@ -20,19 +24,27 @@ export const updateSongDOM = (data) => {
   // clear possible timeouts and intervals 
   clearSlideState();
 
-  const colorThief = new ColorThief();
-
   // Make sure image is finished loading
   if (albumCover.complete) {
     setColor(colorThief.getColor(albumCover))
   } else {
     albumCover.addEventListener('load', function () {
       setColor(colorThief.getColor(albumCover))
-    });
+    }, { once: true });
   }
 
   function setColor(color) {
     mainContainer.style.background = `rgb(${color[0]},${color[1]},${color[2]})`
+
+    // Check color brightness
+    const luma = 0.2126 * color[0] + 0.7152 * color[1] + 0.0722 * color[2]; // per ITU-R BT.709
+
+    if (luma < 50) {
+      fillVolume.style.background = "white"
+    } else {
+      fillVolume.style.background = `rgb(${color[0]},${color[1]},${color[2]})`
+    }
+
   }
 
   handleSongNameSlide()

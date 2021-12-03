@@ -8,7 +8,5 @@ export const checkIfTrackIsSaved = async (songId, ACCESS_TOKEN) => {
   })
   const data = await res.json();
 
-
-  console.log(data)
-  return data
+  return data[0]
 }

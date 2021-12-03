@@ -129,7 +129,7 @@
   position: absolute;
   inset: 0;
   background: transparent;
-  background: linear-gradient(145deg, rgba(0, 0, 0, 0) 0%, rgba(25, 20, 20, 0.6) 70%);
+  background: linear-gradient(145deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 70%);
 }
 
 .wrapper .main .album-cover {
@@ -150,8 +150,8 @@
 
 .wrapper .main .heart-btn {
   position: absolute;
-  top: -1px;
-  right: -6px;
+  top: -3px;
+  right: -8px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -159,7 +159,7 @@
   outline: none;
   background-color: transparent;
   border: none;
-  padding: 6px 6px 6px 4px;
+  padding: 8px;
 }
 
 .wrapper .main .heart-btn svg {
@@ -295,7 +295,7 @@
   border: none;
   color: white;
   padding: 0 6px;
-  margin: 0 4px;
+  margin: 0 3px;
   height: 100%;
   position: relative;
   width: 27px;
@@ -384,6 +384,165 @@
 .wrapper .main .section .controllers .controllers-group .controllers__btn--stroke:hover .toggle-blob--track {
   opacity: 1;
   background-color: #1DB954;
+}
+
+.wrapper .main .section .controllers .volume-container {
+  position: absolute;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  bottom: 3px;
+  right: 3px;
+  width: 120px;
+  height: 26px;
+}
+
+.wrapper .main .section .controllers .volume-container:hover .animate-volume-fill {
+  background: #0ebb4b !important;
+}
+
+.wrapper .main .section .controllers .volume-container:hover .volume-btn svg {
+  stroke: white !important;
+}
+
+.wrapper .main .section .controllers .volume-container .volume-btn {
+  display: -ms-grid;
+  display: grid;
+  place-items: center;
+  outline: none;
+  background-color: transparent;
+  border: none;
+  padding: 4px 0 4px 4px;
+}
+
+.wrapper .main .section .controllers .volume-container .volume-btn svg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.8);
+  width: 16px;
+  max-height: 16px;
+}
+
+.wrapper .main .section .controllers .volume-container .volume-wrapper {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background: transparent;
+  width: 100%;
+  height: 100%;
+  margin-left: 4px;
+}
+
+.wrapper .main .section .controllers .volume-container .volume-wrapper input {
+  width: 100%;
+  -webkit-appearance: none;
+  background: transparent;
+  height: 100%;
+  position: absolute;
+  z-index: 5;
+}
+
+.wrapper .main .section .controllers .volume-container .volume-wrapper input[type="range"]:focus {
+  outline: none;
+}
+
+.wrapper .main .section .controllers .volume-container .volume-wrapper input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 16px;
+  width: 16px;
+}
+
+.wrapper .main .section .controllers .volume-container .volume-wrapper input[type="range"]::-moz-range-thumb {
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+}
+
+.wrapper .main .section .controllers .volume-container .volume-wrapper:hover .volume-circle {
+  display: block !important;
+}
+
+.wrapper .main .section .controllers .volume-container .volume-wrapper .volume-box {
+  position: relative;
+  width: 100%;
+  margin: 0 4px;
+  pointer-events: none;
+}
+
+.wrapper .main .section .controllers .volume-container .volume-wrapper .volume-box .inner-volume-box {
+  width: 100%;
+  height: 4px;
+  overflow: hidden;
+  border-radius: 12px;
+  pointer-events: none;
+}
+
+.wrapper .main .section .controllers .volume-container .volume-wrapper .volume-box .inner-volume-box .animate-volume-fill {
+  position: relative;
+  width: 100%;
+  height: 4px;
+  background: #B4B4B4;
+  border-radius: 12px;
+  pointer-events: none;
+  z-index: 3;
+  -webkit-transform: translate3d(-66%, 0px, 0px);
+          transform: translate3d(-66%, 0px, 0px);
+}
+
+.wrapper .main .section .controllers .volume-container .volume-wrapper .volume-box .inner-volume-box .animate-volume {
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  top: 50%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  pointer-events: none;
+  z-index: 3;
+  -webkit-transform: translate3d(-66%, -50%, 0px);
+          transform: translate3d(-66%, -50%, 0px);
+}
+
+.wrapper .main .section .controllers .volume-container .volume-wrapper .volume-box .inner-volume-box .animate-volume .volume-circle {
+  display: none;
+  position: absolute;
+  right: -6px;
+  width: 12px;
+  height: 12px;
+  background-color: #fafafa;
+  border-radius: 100%;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.wrapper .main .section .controllers .volume-container .volume-wrapper .volume-box .inner-volume-box .fill-volume {
+  position: absolute;
+  background: #1d1d1d;
+  width: 100%;
+  height: 4px;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  border-radius: 12px;
+  pointer-events: none;
+  z-index: 2;
+  -webkit-filter: brightness(0.3);
+          filter: brightness(0.3);
 }
 
 .wrapper .main .music-wave-container {

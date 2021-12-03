@@ -10,12 +10,14 @@ import { refreshToken } from "./utils/refreshToken.js"
 import { activateDevice } from "./utils/activateDevice.js"
 import { ListenForDevice } from "./utils/listenForDevice.js"
 import { sleep } from "./utils/sleep.js"
-import { playIcon, pauseIcon, likeIcon, unlikeIcon } from "./utils/svgIcons.js"
+import { playIcon, pauseIcon, likeIcon, unlikeIcon, volumeMute, volumeLow, volumeMedium, volumeHigh } from "./utils/svgIcons.js"
 import { setRepeat } from "./utils/api/setRepeat.js"
 import { toggleSaveTrack } from "./utils/api/toggleSaveTrack.js"
 import { checkIfTrackIsSaved } from "./utils/api/checkIfTrackIsSaved.js"
 import { hideLoader } from "./utils/hideLoader.js"
 import { playTrackAgain } from "./utils/api/playTrackAgain.js"
+import { setVolume } from "./utils/api/setVolume.js"
+import { setVolumeIcon } from "./utils/setVolumeIcon.js"
 // import { ACCESS_TOKEN, REFRESH_TOKEN } from "./background.js"
 let ACCESS_TOKEN = "";
 let REFRESH_TOKEN = "";
@@ -42,11 +44,18 @@ const musicWave = document.querySelector("[data-js=music-wave]")
 const musicBullet = document.querySelector("[data-js=music-bullet]")
 const heartBtn = document.querySelector("[data-js=heart-btn]")
 
+const volumeInput = document.querySelector("[data-js=volume-input]")
+const animateVolume = document.querySelector("[data-js=animate-volume]")
+const animateVolumeFill = document.querySelector("[data-js=animate-volume-fill]")
+const volumeBtn = document.querySelector("[data-js=volume-btn]")
+
 
 // GLOBAL VARS
 let isPlaying = false;
 let isShuffle = false;
 let isLiked = false;
+let prevVolume = 10;
+let currentVolume = 0; // range 0-100
 let repeatState = "off";
 let currentTrackId = "";
 // In some places we are re-invoking/recursing the same function
@@ -65,7 +74,6 @@ const CurrentTrackState = async (devices) => {
       "Content-Type": "application/json",
     }
   });
-
 
   // Error handling
   if (res.status === 204) { // If no content is returned (we need to activate device)
@@ -88,22 +96,31 @@ const CurrentTrackState = async (devices) => {
 
   if (data.error && data.error.status === 401) { // If ACCESS_TOKEN is invalid
     // GENERATE NEW TOKEN
+    console.log("OLD ACCESS_TOKEN: " + ACCESS_TOKEN)
     const wasSuccessful = await refreshToken(REFRESH_TOKEN);
     if (wasSuccessful) {
+      console.log("Was Successful!")
       invokeStateCount++;
       return CurrentTrackState(devices)
     }
-    return authorizeContianer.style.display = "grid"; // make user login manually
+
+    hideLoader();
+    authorizeContianer.style.display = "grid"; // make user login manually
+    return
   }
 
   // UPDATE CONTROLLERS DOM
   isPlaying = data.is_playing;
   isShuffle = data.shuffle_state;
   repeatState = data.repeat_state;
+  currentVolume = data.device.volume_percent;
   isLiked = await checkIfTrackIsSaved(data.item.id, ACCESS_TOKEN);
 
-  const dom = { stopTrackBtn, shuffleIcon, shuffleBlob, repeatIcon, repeatBlob, repeatTrackBlob, musicWave, musicBullet, heartBtn }
-  const state = { isPlaying, isShuffle, repeatState, isLiked }
+  const dom = {
+    stopTrackBtn, shuffleIcon, shuffleBlob, repeatIcon, repeatBlob, repeatTrackBlob,
+    musicWave, musicBullet, heartBtn, volumeInput, animateVolume, animateVolumeFill,
+  }
+  const state = { isPlaying, isShuffle, repeatState, isLiked, currentVolume }
 
   updateControllerDOM({ state, dom })
 
@@ -204,7 +221,6 @@ const SpotifyControllers = () => {
     if (isSubmitting) return;
     isSubmitting = true;
 
-    // console.log(isLiked)
     isLiked ? heartBtn.innerHTML = unlikeIcon() : heartBtn.innerHTML = likeIcon()
     if (!isLiked) {
       heartBtn.classList.add("like-animation")
@@ -213,6 +229,41 @@ const SpotifyControllers = () => {
 
     isSubmitting = await toggleSaveTrack(isLiked, currentTrackId, ACCESS_TOKEN)
     isLiked = !isLiked;
+  })
+
+
+  volumeInput.addEventListener("change", async (e) => {
+    if (isSubmitting) return;
+    isSubmitting = true;
+
+    const VOLUME = parseInt(e.target.value)
+    isSubmitting = await setVolume(VOLUME, ACCESS_TOKEN)
+    currentVolume = VOLUME
+  })
+
+  volumeInput.addEventListener("input", (e) => {
+
+    const VOLUME = parseInt(e.target.value)
+
+    setVolumeIcon(VOLUME)
+
+  })
+
+  volumeBtn.addEventListener("click", async () => {
+    if (isSubmitting) return;
+    isSubmitting = true;
+
+    if (currentVolume === 0) {
+      setVolumeIcon(prevVolume)
+      isSubmitting = await setVolume(prevVolume, ACCESS_TOKEN)
+      currentVolume = prevVolume;
+    } else {
+      setVolumeIcon(0)
+      isSubmitting = await setVolume(0, ACCESS_TOKEN)
+      prevVolume = currentVolume;
+      currentVolume = 0;
+    }
+
   })
 
 }
@@ -256,6 +307,8 @@ async function prepareInit(ACCESS_TOKEN, REFRESH_TOKEN) {
     }
 
     initPlayer(devices)
+  } else {
+    hideLoader();
   }
 }
 

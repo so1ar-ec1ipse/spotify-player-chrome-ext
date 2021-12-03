@@ -104,7 +104,7 @@
       position: absolute;
       inset: 0;
       background: transparent;
-      background: linear-gradient(145deg, rgba(0,0,0,0) 0%, rgba(25,20,20,0.6) 70%);
+      background: linear-gradient(145deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 70%);
     }
     .album-cover {
       position: relative;
@@ -120,14 +120,14 @@
     }
     .heart-btn {
       position: absolute;
-      top: -1px;
-      right: -6px;
+      top: -3px;
+      right: -8px;
       display: flex;
       height: auto;
       outline: none;
       background-color: transparent;
       border: none;
-      padding: 6px 6px 6px 4px;
+      padding: 8px;
       svg {
         fill: rgba(255,255,255,0.8);
         width: 20px;
@@ -218,7 +218,7 @@
             border: none;
             color: white;
             padding: 0 6px;
-            margin: 0 4px;
+            margin: 0 3px;
             height: 100%;
             position: relative;
             width: 27px;
@@ -294,6 +294,132 @@
             }
           }
         }
+
+        .volume-container {
+          position: absolute;
+          display: flex;
+          align-items: center;
+          bottom: 3px;
+          right: 3px;
+          width: 120px;
+          height: 26px;
+          &:hover .animate-volume-fill {
+            background: #0ebb4b !important;
+          }
+          &:hover .volume-btn svg {
+            stroke: rgb(255,255,255) !important;
+          }
+          .volume-btn {
+            display: grid;
+            place-items: center;
+            outline: none;
+            background-color: transparent;
+            border: none;
+            padding: 4px 0 4px 4px;
+            svg {
+              fill: none;
+              stroke: rgba(255,255,255,0.8);
+              width: 16px;
+              max-height: 16px;
+            }
+
+          }
+          .volume-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            background: transparent;
+            width: 100%;
+            height: 100%;
+            margin-left: 4px;
+            input {
+              width: 100%;
+              -webkit-appearance: none;
+              background: transparent;
+              height: 100%;
+              position: absolute;
+              z-index: 5;
+            }
+            input[type="range"]:focus {
+              outline: none;
+            }
+            input[type="range"]::-webkit-slider-thumb {
+              -webkit-appearance: none;
+              height: 16px;
+              width: 16px;
+            }
+            input[type="range"]::-moz-range-thumb {
+              -webkit-appearance: none;
+              background: transparent;
+              border: none;
+            }
+            &:hover .volume-circle {
+              display: block !important;
+            }
+            .volume-box {
+              position: relative;
+              width: 100%;
+              margin: 0 4px;
+              pointer-events: none;
+              .inner-volume-box {
+                width: 100%;
+                height: 4px;
+                overflow: hidden;
+                border-radius: 12px;
+                pointer-events: none;
+                .animate-volume-fill {
+                  position: relative;
+                  width: 100%;
+                  height: 4px;
+                  background: #B4B4B4;
+                  border-radius: 12px;
+                  pointer-events: none;
+                  z-index: 3;
+
+                  transform: translate3d(-66%, 0px, 0px)
+
+                }
+                .animate-volume {
+                  position: absolute;
+                  width: 100%;
+                  height: 4px;
+                  top: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: flex-end;
+                  pointer-events: none;
+                  z-index: 3;
+                  transform: translate3d(-66%, -50%, 0px);
+                  .volume-circle {
+                    display: none;
+                    position: absolute;
+                    right: -6px;
+                    width: 12px;
+                    height: 12px;
+                    background-color: #fafafa;
+                    border-radius: 100%;
+                    pointer-events: none;
+                    z-index: 100;
+                  }
+                }
+                .fill-volume {
+                  position: absolute;
+                  background: #1d1d1d;
+                  width: 100%;
+                  height: 4px;
+                  top: 50%;
+                  transform: translateY(-50%);
+                  border-radius: 12px;
+                  pointer-events: none;
+                  z-index: 2;
+                  filter: brightness(0.3);
+                }
+              }
+            }
+          }
+        }
+
 
       }
     }

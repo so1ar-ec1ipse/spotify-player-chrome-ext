@@ -1,11 +1,12 @@
 
+import { setVolumeIcon } from "./setVolumeIcon.js";
 import { playIcon, pauseIcon, unlikeIcon, likeIcon } from "./svgIcons.js";
 
 export const updateControllerDOM = ({ state, dom }) => {
 
   dom.stopTrackBtn.innerHTML = state.isPlaying ? pauseIcon() : playIcon();
 
-  state.isLiked ? dom.heartBtn.innerHTML = unlikeIcon() : dom.heartBtn.innerHTML = likeIcon()
+  state.isLiked ? dom.heartBtn.innerHTML = likeIcon() : dom.heartBtn.innerHTML = unlikeIcon()
 
   if (!state.isPlaying) {
     dom.musicWave.style.visibility = "hidden";
@@ -24,4 +25,6 @@ export const updateControllerDOM = ({ state, dom }) => {
       dom.repeatTrackBlob.style.display = "grid"
     }
   }
+
+  setVolumeIcon(state.currentVolume)
 }
