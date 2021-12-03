@@ -10,8 +10,9 @@ import { refreshToken } from "./utils/refreshToken.js"
 import { activateDevice } from "./utils/activateDevice.js"
 import { ListenForDevice } from "./utils/listenForDevice.js"
 import { sleep } from "./utils/sleep.js"
-import { playIcon, pauseIcon } from "./utils/svgIcons.js"
+import { playIcon, pauseIcon, likeIcon, unlikeIcon } from "./utils/svgIcons.js"
 import { setRepeat } from "./utils/api/setRepeat.js"
+import { toggleSaveTrack } from "./utils/api/toggleSaveTrack.js"
 // import { ACCESS_TOKEN, REFRESH_TOKEN } from "./background.js"
 let ACCESS_TOKEN = "";
 let REFRESH_TOKEN = "";
@@ -36,9 +37,13 @@ const repeatBlob = document.querySelector("[data-js=repeat-blob]")
 const repeatTrackBlob = document.querySelector("[data-js=repeat-track-blob]")
 
 
+const heartBtn = document.querySelector("[data-js=heart-btn]")
+
+
 // GLOBAL VARS
 let isPlaying = false;
 let isShuffle = false;
+let isLiked = false;
 let repeatState = "off";
 let currentTrackId = "";
 // In some places we are re-invoking/recursing the same function
@@ -92,7 +97,8 @@ const CurrentTrackState = async (devices) => {
   updateControllerDOM({ state, dom })
 
   // UPDATE SONG DOM
-  currentTrackId = data.item.uri
+  console.log(data)
+  currentTrackId = data.item.id
   updateSongDOM(data)
 }
 
@@ -174,6 +180,20 @@ const SpotifyControllers = () => {
       repeatState = "off"
     }
 
+  })
+
+  heartBtn.addEventListener("click", async () => {
+    if (isSubmitting) return;
+    isSubmitting = true;
+
+    isLiked ? heartBtn.innerHTML = unlikeIcon() : heartBtn.innerHTML = likeIcon()
+    if (!isLiked) {
+      heartBtn.classList.add("like-animation")
+      setTimeout(() => heartBtn.classList.remove("like-animation"), 400)
+    }
+
+    isSubmitting = await toggleSaveTrack(isLiked, currentTrackId, ACCESS_TOKEN)
+    isLiked = !isLiked;
   })
 
 }

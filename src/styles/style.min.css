@@ -151,8 +151,8 @@
 
 .wrapper .main .heart-btn {
   position: absolute;
-  top: 5px;
-  right: 0;
+  top: -1px;
+  right: -6px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -160,12 +160,60 @@
   outline: none;
   background-color: transparent;
   border: none;
+  padding: 6px 6px 6px 4px;
 }
 
 .wrapper .main .heart-btn svg {
   fill: rgba(255, 255, 255, 0.8);
   width: 20px;
   max-height: 20px;
+}
+
+.wrapper .main .heart-btn .like-svg {
+  fill: #0ebb4b;
+}
+
+.wrapper .main .like-animation {
+  -webkit-animation: likeAnimation 400ms;
+          animation: likeAnimation 400ms;
+}
+
+@-webkit-keyframes likeAnimation {
+  0% {
+    -webkit-transform: scale3d(0.4, 0.4, 0.4);
+            transform: scale3d(0.4, 0.4, 0.4);
+  }
+  50% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1);
+            transform: scale3d(1.1, 1.1, 1.1);
+  }
+  75% {
+    -webkit-transform: scale3d(0.9, 0.9, 0.9);
+            transform: scale3d(0.9, 0.9, 0.9);
+  }
+  100% {
+    -webkit-transform: scale3d(1, 1, 1);
+            transform: scale3d(1, 1, 1);
+  }
+}
+
+@keyframes likeAnimation {
+  0% {
+    -webkit-transform: scale3d(0.4, 0.4, 0.4);
+            transform: scale3d(0.4, 0.4, 0.4);
+  }
+  50% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1);
+            transform: scale3d(1.1, 1.1, 1.1);
+  }
+  75% {
+    -webkit-transform: scale3d(0.9, 0.9, 0.9);
+            transform: scale3d(0.9, 0.9, 0.9);
+  }
+  100% {
+    -webkit-transform: scale3d(1, 1, 1);
+            transform: scale3d(1, 1, 1);
+  }
 }
 
 .wrapper .main .section {
@@ -200,7 +248,7 @@
   height: 37px;
   min-height: 37px;
   overflow: hidden;
-  max-width: 285px;
+  max-width: 287px;
   margin-left: 28px;
 }
 
@@ -217,6 +265,8 @@
   font-family: 'Roboto', sans-serif;
   font-style: italic;
   font-weight: 400;
+  overflow: hidden;
+  white-space: nowrap;
   color: rgba(255, 255, 255, 0.65);
   margin-top: 2px;
 }

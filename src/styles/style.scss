@@ -120,17 +120,49 @@
     }
     .heart-btn {
       position: absolute;
-      top: 5px;
-      right: 0;
+      top: -1px;
+      right: -6px;
       display: flex;
       height: auto;
       outline: none;
       background-color: transparent;
       border: none;
+      padding: 6px 6px 6px 4px;
       svg {
         fill: rgba(255,255,255,0.8);
         width: 20px;
         max-height: 20px;
+      }
+      .like-svg {
+        fill: #0ebb4b;
+        // &:active {
+        //   animation: likeAnimation 1s;
+        // }
+        // @keyframes likeAnimation {
+        //   from {
+        //     transform: scale3d(0.4,0.4,0.4);
+        //   }
+        //   to {
+        //     transform: scale3d(1,1,1);
+        //   }
+        // }
+      }
+    }
+    .like-animation {
+      animation: likeAnimation 400ms;
+    }
+    @keyframes likeAnimation {
+      0% {
+        transform: scale3d(0.4,0.4,0.4);
+      }
+      50% {
+        transform: scale3d(1.1,1.1,1.1);
+      }
+      75% {
+        transform: scale3d(0.9,0.9,0.9);
+      }
+      100% {
+        transform: scale3d(1,1,1);
       }
     }
     .section {
@@ -150,7 +182,7 @@
         height: 37px;
         min-height: 37px;
         overflow:hidden;
-        max-width: 285px;
+        max-width: 287px;
         margin-left: 28px;
         .song__name {
           font-family: 'Inter', sans-serif;
@@ -164,6 +196,8 @@
           font-family: 'Roboto', sans-serif;
           font-style: italic;
           font-weight: 400;
+          overflow: hidden;
+          white-space: nowrap;
           color: rgba(255, 255, 255, 0.65);
           margin-top: 2px;
         }

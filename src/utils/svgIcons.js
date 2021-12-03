@@ -219,6 +219,7 @@ export const likeIcon = () => (
   <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
   <svg
+    class="like-svg"
     xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:cc="http://creativecommons.org/ns#"
