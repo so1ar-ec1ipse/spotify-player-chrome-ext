@@ -20,6 +20,9 @@
 <body>
     <div class="wrapper">
 
+        <div class="loader-wrapper" data-js="loader">
+            <div class="dot-pulse"></div>
+        </div>
         <div class="authorize" data-js="authorize">
             <img class="spotify-logo" src="./assets/Spotify_Logo_RGB_White.png" alt="Spotify logo">
             <div class="login-container">
@@ -41,12 +44,13 @@
                 <img data-js="album-cover" src="./assets/Spotify_Icon_RGB_Green.png" alt="album cover"
                     crossorigin="anonymous">
             </div>
-            <div class="music-wave-container">
+            <div class="music-wave-container" data-js="music-wave">
                 <span></span>
                 <span></span>
                 <span></span>
                 <span></span>
             </div>
+            <div class="music-bullet" data-js="music-bullet"></div>
             <div class="section">
                 <div class="song" data-js="song">
                     <div class="song__name" data-js="song__name">Spotify Controller</div>

@@ -8,7 +8,7 @@ export const checkDeviceStatus = async (ACCESS_TOKEN, REFRESH_TOKEN) => {
     method: "GET",
     headers: {
       "Authorization": `Bearer ${ACCESS_TOKEN}`,
-      "Content-Type": "Content-Type: application/json"
+      "Content-Type": "application/json"
     }
   })
   const data = await res.json()

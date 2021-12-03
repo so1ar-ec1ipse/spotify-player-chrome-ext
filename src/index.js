@@ -13,6 +13,9 @@ import { sleep } from "./utils/sleep.js"
 import { playIcon, pauseIcon, likeIcon, unlikeIcon } from "./utils/svgIcons.js"
 import { setRepeat } from "./utils/api/setRepeat.js"
 import { toggleSaveTrack } from "./utils/api/toggleSaveTrack.js"
+import { checkIfTrackIsSaved } from "./utils/api/checkIfTrackIsSaved.js"
+import { hideLoader } from "./utils/hideLoader.js"
+import { playTrackAgain } from "./utils/api/playTrackAgain.js"
 // import { ACCESS_TOKEN, REFRESH_TOKEN } from "./background.js"
 let ACCESS_TOKEN = "";
 let REFRESH_TOKEN = "";
@@ -35,8 +38,8 @@ const shuffleBlob = document.querySelector("[data-js=shuffle-blob]")
 const repeatIcon = document.querySelector("[data-js=repeat-icon]")
 const repeatBlob = document.querySelector("[data-js=repeat-blob]")
 const repeatTrackBlob = document.querySelector("[data-js=repeat-track-blob]")
-
-
+const musicWave = document.querySelector("[data-js=music-wave]")
+const musicBullet = document.querySelector("[data-js=music-bullet]")
 const heartBtn = document.querySelector("[data-js=heart-btn]")
 
 
@@ -55,14 +58,14 @@ let invokeStateCount = 0;
 const CurrentTrackState = async (devices) => {
   if (invokeStateCount >= 5) return
 
-  const res = await fetch("https://api.spotify.com/v1/me/player/currently-playing", {
+  const res = await fetch("https://api.spotify.com/v1/me/player", {
     method: "GET",
     headers: {
       "Authorization": `Bearer ${ACCESS_TOKEN}`,
       "Content-Type": "application/json",
-      "Accept": "application/json"
     }
   });
+
 
   // Error handling
   if (res.status === 204) { // If no content is returned (we need to activate device)
@@ -78,6 +81,11 @@ const CurrentTrackState = async (devices) => {
 
   const data = await res.json();
 
+  // Check if song is the same
+  if (data && data.item && currentTrackId === data.item.id) {
+    await playTrackAgain(ACCESS_TOKEN)
+  }
+
   if (data.error && data.error.status === 401) { // If ACCESS_TOKEN is invalid
     // GENERATE NEW TOKEN
     const wasSuccessful = await refreshToken(REFRESH_TOKEN);
@@ -89,18 +97,24 @@ const CurrentTrackState = async (devices) => {
   }
 
   // UPDATE CONTROLLERS DOM
-  isPlaying = data.is_playing
+  isPlaying = data.is_playing;
+  isShuffle = data.shuffle_state;
+  repeatState = data.repeat_state;
+  isLiked = await checkIfTrackIsSaved(data.item.id, ACCESS_TOKEN);
 
-  const dom = { stopTrackBtn }
-  const state = { isPlaying }
+  const dom = { stopTrackBtn, shuffleIcon, shuffleBlob, repeatIcon, repeatBlob, repeatTrackBlob, musicWave, musicBullet, heartBtn }
+  const state = { isPlaying, isShuffle, repeatState, isLiked }
 
   updateControllerDOM({ state, dom })
 
   // UPDATE SONG DOM
-  console.log(data)
   currentTrackId = data.item.id
   updateSongDOM(data)
+
+  // Hide loader
+  spotifyNotOpenError(false)
 }
+
 
 const SpotifyControllers = () => {
   let isSubmitting = false;
@@ -131,9 +145,13 @@ const SpotifyControllers = () => {
 
     if (isPlaying) {
       stopTrackBtn.innerHTML = playIcon();
+      musicWave.style.visibility = "hidden";
+      musicBullet.style.display = "block";
       isSubmitting = await togglePlay("pause", ACCESS_TOKEN);
     } else {
       stopTrackBtn.innerHTML = pauseIcon();
+      musicWave.style.visibility = "";
+      musicBullet.style.display = "";
       isSubmitting = await togglePlay("play", ACCESS_TOKEN);
     }
     isPlaying = !isPlaying;
@@ -186,6 +204,7 @@ const SpotifyControllers = () => {
     if (isSubmitting) return;
     isSubmitting = true;
 
+    // console.log(isLiked)
     isLiked ? heartBtn.innerHTML = unlikeIcon() : heartBtn.innerHTML = likeIcon()
     if (!isLiked) {
       heartBtn.classList.add("like-animation")
@@ -232,7 +251,7 @@ async function prepareInit(ACCESS_TOKEN, REFRESH_TOKEN) {
       // We want to make sure we wait until spotify is detected
       const foundADevice = await ListenForDevice(5000, ACCESS_TOKEN, REFRESH_TOKEN);
       if (!foundADevice) return
-      spotifyNotOpenError(false)
+      // spotifyNotOpenError(false)
       devices = foundADevice
     }
 

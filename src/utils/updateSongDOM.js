@@ -4,6 +4,9 @@ const songArtists = document.querySelector("[data-js=song__artists]")
 const mainContainer = document.querySelector("[data-js=main]")
 const song = document.querySelector("[data-js=song]")
 
+let timeoutArr = []
+let intervalArr = []
+
 export const updateSongDOM = (data) => {
   let commaSeperatedArtists = ""
   data.item.artists.forEach((obj, idx) => {
@@ -13,6 +16,9 @@ export const updateSongDOM = (data) => {
   albumCover.src = data.item.album.images.length > 1 ? data.item.album.images[1].url : data.item.album.images[0].url
   songName.innerText = data.item.name;
   songArtists.innerText = commaSeperatedArtists;
+
+  // clear possible timeouts and intervals 
+  clearSlideState();
 
   const colorThief = new ColorThief();
 
@@ -31,7 +37,6 @@ export const updateSongDOM = (data) => {
 
   handleSongNameSlide()
 }
-
 
 function handleSongNameSlide() {
   const SONG_WIDTH = song.offsetWidth;
@@ -55,7 +60,7 @@ function handleSongNameSlide() {
     const LENGTH = ARTIST_WIDTH - SONG_WIDTH
 
     // Change these values for different slide speed & delay
-    const ANIMATION_TIME = LENGTH / 25;
+    const ANIMATION_TIME = LENGTH / 24;
     const intervalDelay = 2500;
 
     createAnimationLoop(songArtists, LENGTH, ANIMATION_TIME, intervalDelay)
@@ -66,25 +71,47 @@ function handleSongNameSlide() {
 
     slideElement.style.transition = `${ANIMATION_TIME}s linear`
 
-    setTimeout(() => {
+    const timeout1 = setTimeout(() => {
       slideElement.style.transform = `translate3d(-${LENGTH}px, 0, 0)`
 
-      setTimeout(() => {
+      const timeout2 = setTimeout(() => {
         slideElement.style.transform = `translate3d(0, 0, 0)`
 
-        setInterval(() => {
+        const interval2 = setInterval(() => {
           slideElement.style.transform = "translate3d(0, 0, 0)"
         }, ((ANIMATION_TIME * 1000) * 2) + intervalDelay * 2)
 
+        intervalArr.push(interval2)
+
       }, (ANIMATION_TIME * 1000) + intervalDelay)
 
-      setInterval(() => {
+      timeoutArr.push(timeout2)
+
+      const interval1 = setInterval(() => {
         slideElement.style.transform = `translate3d(-${LENGTH}px, 0, 0)`
       }, ((ANIMATION_TIME * 1000) * 2) + intervalDelay * 2)
 
+      intervalArr.push(interval1)
+
     }, 2000)
+
+    timeoutArr.push(timeout1)
+
 
   }
 
+}
+
+function clearSlideState() {
+  timeoutArr.forEach((id) => clearTimeout(id))
+  intervalArr.forEach((id) => clearInterval(id))
+  timeoutArr = []
+  intervalArr = []
+
+  // Clear dom
+  songName.style.transition = ""
+  songArtists.style.transition = ""
+  songName.style.transform = ""
+  songArtists.style.transform = ""
 
 }
