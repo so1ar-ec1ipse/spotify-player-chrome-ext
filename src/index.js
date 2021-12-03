@@ -19,6 +19,10 @@ import { playTrackAgain } from "./utils/api/playTrackAgain.js"
 import { setVolume } from "./utils/api/setVolume.js"
 import { setVolumeIcon } from "./utils/setVolumeIcon.js"
 // import { ACCESS_TOKEN, REFRESH_TOKEN } from "./background.js"
+
+// Style
+import "./styles/style.scss"
+
 let ACCESS_TOKEN = "";
 let REFRESH_TOKEN = "";
 
