@@ -1,3 +1,5 @@
+import { playingType } from "./handleSpotifyControllers.js"
+
 const albumCover = document.querySelector("[data-js=album-cover]")
 const songName = document.querySelector("[data-js=song__name]")
 const songArtists = document.querySelector("[data-js=song__artists]")
@@ -11,7 +13,7 @@ let intervalArr = []
 
 const colorThief = new ColorThief();
 
-export const updateSongDOM = (data, playingType) => {
+export const updateSongDOM = (data) => {
 
   if (playingType === "track") {
     const imageUrl = data.item.album.images.filter(x => x.width === 300)[0].url

@@ -1,9 +1,10 @@
-import { checkDeviceStatus } from "./checkDeviceStatus.js";
+import { getAvailableDevices } from "./api/getAvailableDevices.js";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "./tokens.js";
 
-export const ListenForDevice = (ms, ACCESS_TOKEN, REFRESH_TOKEN) => {
+export const ListenForDevice = (ms) => {
   return new Promise((resolve) => {
     const interval = setInterval(async () => {
-      const devices = await checkDeviceStatus(ACCESS_TOKEN, REFRESH_TOKEN);
+      const devices = await getAvailableDevices(ACCESS_TOKEN, REFRESH_TOKEN);
       if (devices && devices.length > 0) {
         clearInterval(interval)
         resolve(devices)

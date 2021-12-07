@@ -7,8 +7,9 @@
         "128": "./assets/icon_128.png"
     },
     "browser_action": {
+        "default_title": "Chrome Extension Boilerplate",
         "default_icon": "./assets/icon.png",
-        "default_popup": "popup.html"
+        "default_popup": "index.html"
     },
     "content_security_policy": "script-src 'self' https://cdnjs.cloudflare.com; object-src 'self'",
     "background": {
