@@ -1,4 +1,4 @@
-import { playingType } from "./handleSpotifyControllers.js"
+import { playingType, showMusicWave } from "./handleSpotifyControllers.js"
 
 const albumCover = document.querySelector("[data-js=album-cover]")
 const songName = document.querySelector("[data-js=song__name]")
@@ -27,6 +27,10 @@ export const updateSongDOM = (data) => {
     albumCover.src = imageUrl;
 
     songArtists.innerHTML = `<a href="${data.item.show.external_urls.spotify}" target="_blank">${data.item.show.name}</a>`
+  }
+
+  if (data.is_playing) {
+    showMusicWave();
   }
 
   songName.innerText = data.item.name;

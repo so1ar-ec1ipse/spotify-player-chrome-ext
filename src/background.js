@@ -13,7 +13,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.message === "login") {
     Login(sendResponse)
   }
-
   return true
 })
 

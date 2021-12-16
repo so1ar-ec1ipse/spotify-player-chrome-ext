@@ -37,6 +37,10 @@ export const setRepeatState = (str) => repeatState = str;
 export const setCurrentTrackId = (str) => currentTrackId = str;
 export const setPlayingType = (str) => playingType = str;
 
+export const showMusicWave = () => {
+  musicWave.style.visibility = "visible";
+  musicBullet.style.display = "none";
+}
 
 export const handleSpotifyControllers = (devices) => {
   let isSubmitting = false;
@@ -198,6 +202,5 @@ export const handleSpotifyControllers = (devices) => {
     isSubmitting = false;
 
   })
-
 
 }
