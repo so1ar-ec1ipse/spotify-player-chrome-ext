@@ -1,3 +1,4 @@
+// import ColorThief from "../libs/ColorThief.mjs"
 import { playingType, showMusicWave } from "./handleSpotifyControllers.js"
 
 const albumCover = document.querySelector("[data-js=album-cover]")

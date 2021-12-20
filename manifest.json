@@ -13,7 +13,9 @@
     },
     "content_security_policy": "script-src 'self' https://cdnjs.cloudflare.com; object-src 'self'",
     "background": {
-        "page": "background.html"
+        "scripts": [
+            "./background.js"
+        ]
     },
     "permissions": [
         "identity",

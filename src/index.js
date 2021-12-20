@@ -7,6 +7,8 @@ import { currentTrackState } from "./utils/currentTrackState.js"
 
 import { ACCESS_TOKEN, REFRESH_TOKEN, setTokens } from "./utils/tokens.js"
 
+import "./styles/main.scss";
+
 // DOM
 const authorizeContianer = document.querySelector("[data-js=authorize]")
 const loginBtn = document.querySelector("[data-js=authorize__btn]")
