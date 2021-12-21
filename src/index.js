@@ -1,7 +1,7 @@
 import { getAvailableDevices } from "./utils/api/getAvailableDevices.js"
 import { spotifyNotOpenError } from "./utils/spotifyNotOpenError.js"
 import { ListenForDevice } from "./utils/listenForDevice.js"
-import { hideLoader } from "./utils/hideLoader.js"
+import { hideLoader, showLoader } from "./utils/hideLoader.js"
 import { handleSpotifyControllers } from "./utils/handleSpotifyControllers.js"
 import { currentTrackState } from "./utils/currentTrackState.js"
 
@@ -27,6 +27,7 @@ window.addEventListener("load", () => {
 loginBtn.addEventListener("click", function () {
   chrome.runtime.sendMessage({ message: "login" }, function (response) {
     if (response.message === "success") {
+      showLoader()
 
       setTokens(response.ACCESS_TOKEN, response.REFRESH_TOKEN)
 
@@ -36,7 +37,7 @@ loginBtn.addEventListener("click", function () {
     if (response.message === "fail") {
       const error = document.querySelector("[data-js=error]")
       error.style.display = "grid";
-      error.innerText = response.description
+      error.innerText = response.description.message;
     }
   })
 })

@@ -11,6 +11,7 @@ export const getAvailableDevices = async () => {
       "Content-Type": "application/json"
     }
   })
+
   const data = await res.json()
 
   // REFRESH ACCESS TOKEN

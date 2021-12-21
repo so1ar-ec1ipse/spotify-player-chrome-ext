@@ -18,6 +18,10 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   devtool: 'cheap-module-source-map',
+  output: {
+    filename: "[name].bundle.js",
+    path: path.resolve(__dirname, "dist")
+  },
   entry: {
     main: "./src/index.js",
     vendor: "./src/vendor.js",

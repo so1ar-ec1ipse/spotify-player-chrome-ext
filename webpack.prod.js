@@ -6,12 +6,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = merge(common, {
   mode: "production",
-  output: {
-    filename: "[name].[contenthash].bundle.js",
-    path: path.resolve(__dirname, "dist"),
-  },
   plugins: [
-    new MiniCssExtractPlugin({ filename: "[name].[contenthash]" }),
+    new MiniCssExtractPlugin({ filename: "[name].[contenthash].css" }),
     new CleanWebpackPlugin()
   ],
   module: {
@@ -19,8 +15,7 @@ module.exports = merge(common, {
       {
         test: /\.scss$/,
         use: [
-          // MiniCssExtractPlugin.loader,
-          "style-loader",
+          MiniCssExtractPlugin.loader,
           "css-loader",
           "sass-loader"
         ]
