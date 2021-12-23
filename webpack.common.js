@@ -24,7 +24,6 @@ module.exports = {
   },
   entry: {
     main: "./src/index.js",
-    vendor: "./src/vendor.js",
     background: "./src/background.js"
   },
   plugins: [

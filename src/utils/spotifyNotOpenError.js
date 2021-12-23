@@ -12,5 +12,8 @@ export const spotifyNotOpenError = (bool) => {
     spotifyOpener.style.display = "none";
   }
 
+  // setTimeout(() => {
   hideLoader();
+  // }, 600)
+
 }

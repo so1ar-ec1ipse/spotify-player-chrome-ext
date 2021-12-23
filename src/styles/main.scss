@@ -613,7 +613,7 @@
 }
 
 .fade-out {
-  animation: fadeOut 200ms;
+  animation: fadeOut 200ms forwards;
 }
 
 @keyframes fadeOut {
