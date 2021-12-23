@@ -2,7 +2,7 @@ import { uuidv4 } from "./utils/uuid.js"
 import { pkce_challenge_from_verifier } from "./utils/hash.js"
 import { CLIENT_ID } from "./utils/clientId.js"
 
-const REDIRECT_URI = "https://mknibmhnckbkammgecjbdcoahildbjin.chromiumapp.org/";
+const REDIRECT_URI = "https://oibppmdplpnloohpkdfjhalakblhofgj.chromiumapp.org/";
 const SCOPE = "user-read-private user-read-email user-read-currently-playing user-read-playback-state user-modify-playback-state user-read-recently-played user-library-modify user-library-read";
 const STATE = uuidv4();
 const CODE_VERIFIER = uuidv4() + uuidv4();
