@@ -1,8 +1,9 @@
 import { uuidv4 } from "./utils/uuid.js"
 import { pkce_challenge_from_verifier } from "./utils/hash.js"
 import { CLIENT_ID } from "./utils/clientId.js"
-const REDIRECT_URI = "https://iglffemjlfndeofpooiihkeeomenaihn.chromiumapp.org/";
-const SCOPE = "user-read-private user-read-email user-read-currently-playing user-read-playback-state user-modify-playback-state user-read-recently-played";
+
+const REDIRECT_URI = "https://mknibmhnckbkammgecjbdcoahildbjin.chromiumapp.org/";
+const SCOPE = "user-read-private user-read-email user-read-currently-playing user-read-playback-state user-modify-playback-state user-read-recently-played user-library-modify user-library-read";
 const STATE = uuidv4();
 const CODE_VERIFIER = uuidv4() + uuidv4();
 let ACCESS_TOKEN = ""; // Access token to perform API reqeusts
@@ -13,12 +14,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.message === "login") {
     Login(sendResponse)
   }
-
   return true
 })
 
 
 async function Login(sendResponse) {
+
   // Save to storage (Because we need these when requesting access token for security reasons)
   chrome.storage.sync.set({ "state": STATE });
   chrome.storage.sync.set({ "codeVerifier": CODE_VERIFIER });
@@ -88,6 +89,7 @@ async function RequestAccessToken(code, sendResponse) {
     },
   })
   const resData = await res.json()
+
   // Save to global vars
   ACCESS_TOKEN = resData.access_token
   REFRESH_TOKEN = resData.refresh_token

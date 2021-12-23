@@ -1,8 +1,9 @@
-import { CLIENT_ID } from "./clientId.js";
+import { CLIENT_ID } from "../clientId.js";
+import { ACCESS_TOKEN, REFRESH_TOKEN, setTokens } from "../tokens.js"
 
 const authorize = document.querySelector("[data-js=authorize]")
 
-export const refreshToken = async (REFRESH_TOKEN) => {
+export const refreshToken = async () => {
 
   // Build data for new token request
   const data = new URLSearchParams();
@@ -25,10 +26,11 @@ export const refreshToken = async (REFRESH_TOKEN) => {
     return false
   }
 
-  chrome.storage.sync.set({ "ACCESS_TOKEN": resData.access_token });
-  if (resData.refresh_token) {
-    chrome.storage.sync.set({ "REFRESH_TOKEN": REFRESH_TOKEN });
-  }
+  // Update access tokens
+  setTokens(resData.access_token, resData.refresh_token ? resData.refresh_token : REFRESH_TOKEN)
+
+  chrome.storage.sync.set({ "ACCESS_TOKEN": ACCESS_TOKEN });
+  chrome.storage.sync.set({ "REFRESH_TOKEN": REFRESH_TOKEN });
 
   return true;
 }

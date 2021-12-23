@@ -4,15 +4,20 @@
     "description": "Control your music from the browser",
     "version": "1.0.0",
     "icons": {
-        "128": "./assets/icon_128.png"
+        "128": "./assets/icon-128.png",
+        "48": "./assets/icon-48.png",
+        "16": "./assets/icon-16.png"
     },
     "browser_action": {
-        "default_icon": "./assets/icon.png",
-        "default_popup": "popup.html"
+        "default_title": "Spotify Player Extension",
+        "default_icon": "./assets/icon-128.png",
+        "default_popup": "index.html"
     },
     "content_security_policy": "script-src 'self' https://cdnjs.cloudflare.com; object-src 'self'",
     "background": {
-        "page": "background.html"
+        "scripts": [
+            "./background.bundle.js"
+        ]
     },
     "permissions": [
         "identity",
