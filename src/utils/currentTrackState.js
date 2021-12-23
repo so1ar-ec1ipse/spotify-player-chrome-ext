@@ -3,8 +3,8 @@ import { updateSongDOM } from "./updateSongDOM.js"
 import { updateControllerDOM } from "./updateControllerDOM.js"
 import { activateDevice } from "./api/activateDevice.js"
 import { sleep } from "./sleep.js"
-import { checkIfTrackIsSaved } from "./api/checkIfTrackIsSaved.js"
 import { playTrackAgain } from "./api/playTrackAgain.js"
+import { refreshToken } from "./api/refreshToken.js"
 
 import {
   setIsplaying, setIsShuffle, setIsLiked,
@@ -19,11 +19,12 @@ import { ACCESS_TOKEN } from "./tokens.js"
 // So we keep this counter and when it gets too high we should stop
 // To avoid infinite fetch requests
 let invokeStateCount = 0;
-
+// console.time();
 // Get track state
 export const currentTrackState = async (devices) => {
   if (invokeStateCount >= 5) return // failsafe
 
+  console.timeLog()
   const res = await fetch("https://api.spotify.com/v1/me/player?additional_types=track,episode", {
     method: "GET",
     headers: {
@@ -31,10 +32,11 @@ export const currentTrackState = async (devices) => {
       "Content-Type": "application/json",
     }
   });
-
+  console.log("FETCHED")
   // Error handling
   if (res.status === 204) { // If no content is returned (we need to activate device)
     // This function activates device
+    console.log("204")
     const findDevices = await activateDevice(devices)
     if (findDevices && findDevices.length === 0) {
       return spotifyNotOpenError(true);
@@ -47,7 +49,8 @@ export const currentTrackState = async (devices) => {
   const data = await res.json();
 
   if (data.error && data.error.status === 401) {
-    const success = await refreshToken(REFRESH_TOKEN);
+    console.log("401")
+    const success = await refreshToken();
     if (success) return currentTrackState(devices);
     invokeStateCount++;
   }
@@ -55,6 +58,7 @@ export const currentTrackState = async (devices) => {
   setPlayingType(data.currently_playing_type);
 
   if (playingType === "unknown") {
+    console.log("unknown")
     await sleep(1000);
     invokeStateCount++;
     return currentTrackState(devices)
@@ -65,18 +69,25 @@ export const currentTrackState = async (devices) => {
     await playTrackAgain()
   }
 
+  console.timeLog()
+
   // UPDATE STATE
   setIsplaying(data.is_playing);
   setIsShuffle(data.shuffle_state);
   setRepeatState(data.repeat_state);
   setCurrentVolume(data.device.volume_percent);
   setCurrentTrackId(data.item.id);
-  const getIsLiked = await checkIfTrackIsSaved(data.item.id);
-  setIsLiked(getIsLiked);
+
+  console.log("set state")
+  console.timeEnd()
 
   // Update DOM
-  updateControllerDOM() // Update controller buttons
+  updateControllerDOM(data) // Update controller buttons
   updateSongDOM(data) // Update song info
+
+  // Set isLiked after updateSongDOM because we this is async and is less priority
+  // const getIsLiked = await checkIfTrackIsSaved(data.item.id);
+  // setIsLiked(getIsLiked);
 
   // Hide loader
   spotifyNotOpenError(false)

@@ -85,7 +85,7 @@
     height: 100%;
     background-color: black;
     z-index: 10;
-    background: rgba(25, 20, 20, 0.95);
+    background: rgba(25, 20, 20, 0.98);
     backdrop-filter: blur( 10px );
     -webkit-backdrop-filter: blur( 10px );
     font-family: 'Inter', sans-serif;
@@ -535,6 +535,7 @@
   place-items: center;
   background: rgb(25, 20, 20);
   z-index: 20;
+  // display: none;
   .dot-pulse {
     position: relative;
     left: -9999px;
@@ -613,7 +614,7 @@
 }
 
 .fade-out {
-  animation: fadeOut 200ms forwards;
+  animation: fadeOut 100ms forwards;
 }
 
 @keyframes fadeOut {

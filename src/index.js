@@ -13,10 +13,13 @@ import "./styles/main.scss";
 const authorizeContianer = document.querySelector("[data-js=authorize]")
 const loginBtn = document.querySelector("[data-js=authorize__btn]")
 
+console.time()
 // Logs in user automatically when page loads
 window.addEventListener("load", () => {
+  console.timeLog()
   chrome.storage.sync.get(["ACCESS_TOKEN", "REFRESH_TOKEN"], function (result) {
-
+    console.log("ACCESS TOKEN")
+    console.timeLog()
     setTokens(result.ACCESS_TOKEN, result.REFRESH_TOKEN)
 
     prepareInit()
@@ -46,21 +49,22 @@ loginBtn.addEventListener("click", function () {
 async function prepareInit() {
   if (ACCESS_TOKEN && REFRESH_TOKEN) {
 
-    let devices = await getAvailableDevices();
+    // let devices = await getAvailableDevices();
 
-    if (devices && devices.length === 0) {
-      spotifyNotOpenError(true)
+    // if (devices && devices.length === 0) {
+    //   spotifyNotOpenError(true)
 
-      // Listen for a device for 5 seconds, if still no app is running, return script
-      // This is useful if user opens spotify and extension at the same time
-      // We want to make sure we wait until spotify is detected
-      const foundADevice = await ListenForDevice(5000);
-      if (!foundADevice) return
+    //   // Listen for a device for 5 seconds, if still no app is running, return script
+    //   // This is useful if user opens spotify and extension at the same time
+    //   // We want to make sure we wait until spotify is detected
+    //   const foundADevice = await ListenForDevice(5000);
+    //   if (!foundADevice) return
 
-      devices = foundADevice
-    }
+    //   devices = foundADevice
+    // }
 
-    if (!devices) return hideLoader();
+    // if (!devices) return hideLoader();
+    let devices = "";
 
     initPlayer(devices)
 
