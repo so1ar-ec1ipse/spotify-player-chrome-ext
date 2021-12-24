@@ -101,7 +101,7 @@
   height: 100%;
   background-color: black;
   z-index: 10;
-  background: rgba(25, 20, 20, 0.9);
+  background: rgba(25, 20, 20, 0.95);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   font-family: 'Inter', sans-serif;
@@ -936,8 +936,9 @@
 }
 
 .fade-out {
-  -webkit-animation: fadeOut 200ms;
-          animation: fadeOut 200ms;
+  z-index: 100 !important;
+  -webkit-animation: fadeOut 1000ms forwards;
+          animation: fadeOut 1000ms forwards;
 }
 
 @-webkit-keyframes fadeOut {

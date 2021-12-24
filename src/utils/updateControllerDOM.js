@@ -1,6 +1,7 @@
 
 import { setVolumeIcon } from "./setVolumeIcon.js";
 import { playIcon, pauseIcon, unlikeIcon, likeIcon } from "./svgIcons.js";
+import { checkIfTrackIsSaved } from "./api/checkIfTrackIsSaved.js"
 
 import {
   stopTrackBtn, shuffleBtn, shuffleIcon, shuffleBlob,
@@ -9,10 +10,10 @@ import {
 } from "./spotifyControllerDOM.js";
 
 import {
-  isPlaying, isShuffle, isLiked, currentVolume, repeatState, playingType,
+  isPlaying, isShuffle, isLiked, setIsLiked, currentVolume, repeatState, playingType,
 } from "./handleSpotifyControllers.js"
 
-export const updateControllerDOM = () => {
+export const updateControllerDOM = (data) => {
 
   if (playingType === "episode") {
     shuffleBtn.disabled = true
@@ -26,7 +27,7 @@ export const updateControllerDOM = () => {
 
   stopTrackBtn.innerHTML = isPlaying ? pauseIcon() : playIcon();
 
-  isLiked ? heartBtn.innerHTML = likeIcon() : heartBtn.innerHTML = unlikeIcon()
+  setLikeIconState(data)
 
   if (!isPlaying) {
     musicWave.style.visibility = "hidden";
@@ -47,4 +48,10 @@ export const updateControllerDOM = () => {
   }
 
   setVolumeIcon(currentVolume)
+}
+
+async function setLikeIconState(data) {
+  const getIsLiked = await checkIfTrackIsSaved(data.item.id);
+  setIsLiked(getIsLiked);
+  isLiked ? heartBtn.innerHTML = likeIcon() : heartBtn.innerHTML = unlikeIcon()
 }

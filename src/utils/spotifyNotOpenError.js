@@ -13,4 +13,5 @@ export const spotifyNotOpenError = (bool) => {
   }
 
   hideLoader();
+
 }

@@ -42,7 +42,7 @@ export const showMusicWave = () => {
   musicBullet.style.display = "none";
 }
 
-export const handleSpotifyControllers = (devices) => {
+export const handleSpotifyControllers = () => {
   let isSubmitting = false;
 
   // PREVIOUS TRACK
@@ -53,7 +53,7 @@ export const handleSpotifyControllers = (devices) => {
     isSubmitting = false;
 
     await sleep(playingType === "track" ? 300 : 1000)
-    currentTrackState(devices)
+    currentTrackState()
   })
   // NEXT TRACK
   nextTrackBtn.addEventListener("click", async () => {
@@ -63,7 +63,7 @@ export const handleSpotifyControllers = (devices) => {
     isSubmitting = false
 
     await sleep(playingType === "track" ? 300 : 1000)
-    currentTrackState(devices)
+    currentTrackState()
   })
 
   // TOGGLE STOP/PLAY
