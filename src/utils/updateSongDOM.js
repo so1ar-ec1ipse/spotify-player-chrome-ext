@@ -24,6 +24,7 @@ export const updateSongDOM = (data) => {
     albumCover.src = imageUrl
 
     songArtists.innerHTML = generateArtistsHTML(data.item.artists)
+    song.style.maxWidth = "";
   }
 
   if (playingType === "episode") {
@@ -31,6 +32,7 @@ export const updateSongDOM = (data) => {
     albumCover.src = imageUrl;
 
     songArtists.innerHTML = `<a href="${data.item.show.external_urls.spotify}" target="_blank">${data.item.show.name}</a>`
+    song.style.maxWidth = "312px";
   }
 
   if (data.is_playing) {
