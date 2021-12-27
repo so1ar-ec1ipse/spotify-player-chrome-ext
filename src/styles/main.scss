@@ -304,6 +304,11 @@
               fill: rgba(255, 255, 255, 1);
             }
           }
+          .controllers__btn--fill {
+            &:hover .fill-white {
+              fill: rgba(255, 255, 255, 1);
+            }
+          }
           .controllers__btn--stroke {
             &:hover .stroke-white {
               opacity: 1;

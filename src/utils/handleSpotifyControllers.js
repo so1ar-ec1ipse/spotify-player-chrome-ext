@@ -16,8 +16,10 @@ import { currentTrackState } from "./currentTrackState.js";
 import {
   prevTrackBtn, stopTrackBtn, nextTrackBtn, shuffleBtn, shuffleIcon, shuffleBlob,
   repeatBtn, repeatIcon, repeatBlob, repeatTrackBlob, musicBullet, musicWave,
-  volumeBtn, volumeInput, heartBtn
+  volumeBtn, volumeInput, heartBtn, skipForward, skipBackward
 } from "./spotifyControllerDOM.js";
+import { seekToPosition } from "./api/seekToPosition.js";
+import { setTrackIsPlaying } from "./trackProgress.js";
 
 let prevVolume = 10;
 
@@ -76,11 +78,13 @@ export const handleSpotifyControllers = () => {
       musicWave.style.visibility = "hidden";
       musicBullet.style.display = "block";
       await togglePlay("pause");
+      setTrackIsPlaying(false);
     } else {
       stopTrackBtn.innerHTML = pauseIcon();
       musicWave.style.visibility = "";
       musicBullet.style.display = "";
       await togglePlay("play");
+      setTrackIsPlaying(true);
     }
     isSubmitting = false;
     isPlaying = !isPlaying;
@@ -109,7 +113,7 @@ export const handleSpotifyControllers = () => {
     isSubmitting = false;
     isShuffle = !isShuffle;
   })
-
+  // REPEAT
   repeatBtn.addEventListener("click", async () => {
     if (isSubmitting) return;
     isSubmitting = true;
@@ -202,5 +206,28 @@ export const handleSpotifyControllers = () => {
     isSubmitting = false;
 
   })
+
+
+  // Seek forward
+  skipForward.addEventListener("click", async () => {
+    if (isSubmitting) return;
+    isSubmitting = true;
+
+    // Seek forward 15 seconds
+    await seekToPosition(15000);
+
+    isSubmitting = false;
+  });
+
+  // Seek backward
+  skipBackward.addEventListener("click", async () => {
+    if (isSubmitting) return;
+    isSubmitting = true;
+
+    // Seek backward 15 seconds
+    await seekToPosition(-15000);
+
+    isSubmitting = false;
+  });
 
 }

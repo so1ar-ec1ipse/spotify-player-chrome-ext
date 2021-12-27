@@ -13,6 +13,7 @@ import {
 } from "./handleSpotifyControllers.js"
 
 import { ACCESS_TOKEN } from "./tokens.js"
+import { startProgress } from "./trackProgress.js"
 
 
 // In some places we are re-invoking/recursing the same function
@@ -62,6 +63,9 @@ export const currentTrackState = async () => {
   if (data && data.item && currentTrackId === data.item.id) {
     await playTrackAgain()
   }
+
+  // Start track progress
+  startProgress(data.progress_ms, data.is_playing);
 
   // UPDATE STATE
   setIsplaying(data.is_playing);

@@ -6,7 +6,7 @@ import { checkIfTrackIsSaved } from "./api/checkIfTrackIsSaved.js"
 import {
   stopTrackBtn, shuffleBtn, shuffleIcon, shuffleBlob,
   repeatBtn, repeatIcon, repeatBlob, repeatTrackBlob,
-  musicBullet, musicWave, heartBtn
+  musicBullet, musicWave, heartBtn, skipForward, skipBackward
 } from "./spotifyControllerDOM.js";
 
 import {
@@ -16,13 +16,19 @@ import {
 export const updateControllerDOM = (data) => {
 
   if (playingType === "episode") {
-    shuffleBtn.disabled = true
-    repeatBtn.disabled = true
-    heartBtn.disabled = true
+    heartBtn.style.display = "none";
+    shuffleBtn.style.display = "none";
+    repeatBtn.style.display = "none";
 
-    shuffleBtn.style.cursor = "not-allowed"
-    repeatBtn.style.cursor = "not-allowed"
-    heartBtn.style.cursor = "not-allowed"
+    skipForward.style.display = "block";
+    skipBackward.style.display = "block";
+  } else {
+    heartBtn.style.display = "";
+    shuffleBtn.style.display = "";
+    repeatBtn.style.display = "";
+
+    skipForward.style.display = "none";
+    skipBackward.style.display = "none";
   }
 
   stopTrackBtn.innerHTML = isPlaying ? pauseIcon() : playIcon();
