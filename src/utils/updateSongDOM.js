@@ -19,6 +19,8 @@ const colorThief = new ColorThief();
 
 export const updateSongDOM = (data) => {
 
+  albumCover.style.display = "block";
+
   if (playingType === "track") {
     const imageUrl = data.item.album.images.filter(x => x.width === 300)[0].url
     albumCover.src = imageUrl
