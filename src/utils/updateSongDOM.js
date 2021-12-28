@@ -22,7 +22,8 @@ export const updateSongDOM = (data) => {
   albumCover.style.display = "block";
 
   if (playingType === "track") {
-    const imageUrl = data.item.album.images.filter(x => x.width === 300)[0].url
+    const image = data.item.album.images.filter(x => x.width >= 250 && x.width <= 350)[0]
+    let imageUrl = image ? image.url : data.item.images[0].url
     albumCover.src = imageUrl
 
     songArtists.innerHTML = generateArtistsHTML(data.item.artists)
@@ -30,7 +31,9 @@ export const updateSongDOM = (data) => {
   }
 
   if (playingType === "episode") {
-    const imageUrl = data.item.images.filter(x => x.width === 300)[0].url
+    console.log(data)
+    const image = data.item.images.filter(x => x.width >= 250 && x.width <= 350)[0]
+    let imageUrl = image ? image.url : data.item.images[0].url
     albumCover.src = imageUrl;
 
     songArtists.innerHTML = `<a href="${data.item.show.external_urls.spotify}" target="_blank">${data.item.show.name}</a>`
