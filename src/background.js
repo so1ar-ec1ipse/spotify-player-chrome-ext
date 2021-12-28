@@ -1,6 +1,8 @@
 import { uuidv4 } from "./utils/uuid.js"
-import { pkce_challenge_from_verifier } from "./utils/hash.js"
 import { CLIENT_ID } from "./utils/clientId.js"
+import { sha256 } from "hash.js";
+import { base64urlencode } from "./utils/hash.js";
+
 
 const REDIRECT_URI = "https://mknibmhnckbkammgecjbdcoahildbjin.chromiumapp.org/";
 const SCOPE = "user-read-private user-read-email user-read-currently-playing user-read-playback-state user-modify-playback-state user-read-recently-played user-library-modify user-library-read";
@@ -24,8 +26,10 @@ async function Login(sendResponse) {
   chrome.storage.sync.set({ "state": STATE });
   chrome.storage.sync.set({ "codeVerifier": CODE_VERIFIER });
 
-  // Hash code verifier using sha256 algo.
-  const HASHED_CODE_VERIFIER = await pkce_challenge_from_verifier(CODE_VERIFIER)
+  // Hash CODE_VERIFIER using sha256 algo.
+  const pkce_challenge_from_verifier = base64urlencode(sha256().update(CODE_VERIFIER).digest("base64"));
+
+  const HASHED_CODE_VERIFIER = pkce_challenge_from_verifier;
 
   // Build request object
   const endpointObj = {
@@ -70,9 +74,6 @@ async function Login(sendResponse) {
 // Now when we are logged in, we need to request access token to be able to use Spotify's enpoints
 async function RequestAccessToken(code, sendResponse) {
 
-  // Verify user authorization
-  // const codeVerifier = await verifyAccess(state);
-
   // Build data for token request
   const data = new URLSearchParams();
   data.append("code", code);
@@ -102,7 +103,3 @@ async function RequestAccessToken(code, sendResponse) {
   // await prepareInit(ACCESS_TOKEN, REFRESH_TOKEN);
   sendResponse({ message: "success", ACCESS_TOKEN, REFRESH_TOKEN })
 }
-
-
-
-// export { ACCESS_TOKEN, REFRESH_TOKEN }

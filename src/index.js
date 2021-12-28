@@ -1,6 +1,3 @@
-import { getAvailableDevices } from "./utils/api/getAvailableDevices.js"
-import { spotifyNotOpenError } from "./utils/spotifyNotOpenError.js"
-import { ListenForDevice } from "./utils/listenForDevice.js"
 import { hideLoader, showLoader } from "./utils/hideLoader.js"
 import { handleSpotifyControllers } from "./utils/handleSpotifyControllers.js"
 import { currentTrackState } from "./utils/currentTrackState.js"
