@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Spotify Player",
     "description": "Spotify Player - A simpler way to control your music.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "icons": {
         "128": "./assets/icon-128.png",
         "48": "./assets/icon-48.png",
