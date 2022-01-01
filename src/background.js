@@ -4,7 +4,7 @@ import { sha256 } from "hash.js";
 import { base64urlencode } from "./utils/hash.js";
 
 const REDIRECT_URI = "https://haibeacocpobdaiimnfhjbkiggfacehc.chromiumapp.org/";
-const SCOPE = "user-read-private user-read-email user-read-currently-playing user-read-playback-state user-modify-playback-state user-read-recently-played user-library-modify user-library-read";
+const SCOPE = "user-read-playback-state user-modify-playback-state user-library-modify user-library-read";
 const STATE = uuidv4();
 const CODE_VERIFIER = uuidv4() + uuidv4();
 let ACCESS_TOKEN = ""; // Access token to perform API reqeusts
