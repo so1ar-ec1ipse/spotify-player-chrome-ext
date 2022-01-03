@@ -64,6 +64,7 @@ export const currentTrackState = async () => {
     await playTrackAgain()
   }
 
+  console.log(data)
   // Start track progress
   startProgress(data.progress_ms, data.is_playing);
 

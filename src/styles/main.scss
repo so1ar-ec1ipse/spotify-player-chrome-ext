@@ -123,6 +123,7 @@
       height: 104px;
       min-width: 104px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      cursor: pointer;
       img {
         object-fit: cover;
         width: 100%;
@@ -207,6 +208,9 @@
           color: rgba(255, 255, 255, 0.9);
           cursor: pointer;
           text-decoration: none;
+          &:hover {
+            text-decoration: underline;
+          }
         }
         .song__artists {
           font-family: 'Roboto', sans-serif;
@@ -222,6 +226,9 @@
             color: rgba(255, 255, 255, 0.65);
             text-decoration: none;
             cursor: pointer;
+            &:hover {
+              text-decoration: underline;
+            }
           }
         }
       }

@@ -151,6 +151,7 @@
   min-width: 104px;
   -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
           box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
 }
 
 .wrapper .main .album-cover img {
@@ -278,6 +279,10 @@
   text-decoration: none;
 }
 
+.wrapper .main .section .song .song__name:hover {
+  text-decoration: underline;
+}
+
 .wrapper .main .section .song .song__artists {
   font-family: 'Roboto', sans-serif;
   font-style: italic;
@@ -294,6 +299,10 @@
   color: rgba(255, 255, 255, 0.65);
   text-decoration: none;
   cursor: pointer;
+}
+
+.wrapper .main .section .song .song__artists a:hover {
+  text-decoration: underline;
 }
 
 .wrapper .main .section .controllers {

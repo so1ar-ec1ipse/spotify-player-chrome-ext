@@ -4,6 +4,7 @@ import ColorThief from "../../node_modules/colorthief/dist/color-thief.mjs";
 
 import { playingType, showMusicWave } from "./handleSpotifyControllers.js"
 
+const albumCoverWrapper = document.querySelector("[data-js=album-cover-wrapper]")
 const albumCover = document.querySelector("[data-js=album-cover]")
 const songName = document.querySelector("[data-js=song__name]")
 const songArtists = document.querySelector("[data-js=song__artists]")
@@ -28,16 +29,24 @@ export const updateSongDOM = (data) => {
 
     songArtists.innerHTML = generateArtistsHTML(data.item.artists)
     song.style.maxWidth = "";
+
+    if (data.context) {
+      albumCoverWrapper.href = data.context.external_urls.spotify
+    } else {
+      albumCoverWrapper.href = data.item.album.external_urls.spotify
+    }
   }
 
   if (playingType === "episode") {
-    console.log(data)
     const image = data.item.images.filter(x => x.width >= 250 && x.width <= 350)[0]
     let imageUrl = image ? image.url : data.item.images[0].url
     albumCover.src = imageUrl;
 
-    songArtists.innerHTML = `<a href="${data.item.show.external_urls.spotify}" target="_blank">${data.item.show.name}</a>`
+    const showUrl = data.item.show.external_urls.spotify
+    songArtists.innerHTML = `<a href="${showUrl}" target="_blank">${data.item.show.name}</a>`
     song.style.maxWidth = "312px";
+
+    albumCoverWrapper.href = showUrl
   }
 
   if (data.is_playing) {
