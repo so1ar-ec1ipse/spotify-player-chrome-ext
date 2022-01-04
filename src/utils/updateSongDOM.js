@@ -8,6 +8,7 @@ const albumCoverWrapper = document.querySelector("[data-js=album-cover-wrapper]"
 const albumCover = document.querySelector("[data-js=album-cover]")
 const songName = document.querySelector("[data-js=song__name]")
 const songArtists = document.querySelector("[data-js=song__artists]")
+const songAlbum = document.querySelector("[data-js=song__album]")
 const mainContainer = document.querySelector("[data-js=main]")
 const song = document.querySelector("[data-js=song]")
 
@@ -35,6 +36,16 @@ export const updateSongDOM = (data) => {
     } else {
       albumCoverWrapper.href = data.item.album.external_urls.spotify
     }
+
+    const albumName = data.item.album.name
+    if (albumName) {
+      songAlbum.innerText = albumName;
+      songAlbum.href = data.item.album.external_urls.spotify;
+    } else {
+      songAlbum.innerText = "";
+      songAlbum.href = "";
+    }
+
   }
 
   if (playingType === "episode") {

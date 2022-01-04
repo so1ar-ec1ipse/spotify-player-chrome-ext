@@ -194,8 +194,8 @@
         justify-content: flex-start;
         align-items: flex-start;
         margin-left: 12px;
-        height: 37px;
-        min-height: 37px;
+        // height: 37px;
+        // min-height: 37px;
         overflow:hidden;
         max-width: 283px;
         margin-left: 28px;
@@ -212,7 +212,13 @@
             text-decoration: underline;
           }
         }
-        .song__artists {
+        .song__album {
+          cursor: pointer !important;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+        .song__artists, .song__album {
           font-family: 'Roboto', sans-serif;
           font-style: italic;
           font-weight: 400;
@@ -223,9 +229,9 @@
           cursor: default;
           color: rgba(255, 255, 255, 0.65);
           a {
-            color: rgba(255, 255, 255, 0.65);
             text-decoration: none;
             cursor: pointer;
+            color: rgba(255, 255, 255, 0.65);
             &:hover {
               text-decoration: underline;
             }
