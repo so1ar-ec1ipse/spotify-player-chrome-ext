@@ -1,15 +1,15 @@
 {
     "manifest_version": 3,
-    "name": "Music Player+",
-    "description": "Music Player+ | A simpler way to control your music.",
-    "version": "1.1.1",
+    "name": "Spotify Player+",
+    "description": "Spotify Player+ | A simpler way to control your music.",
+    "version": "1.2.0",
     "icons": {
         "128": "./assets/icon-128.png",
         "48": "./assets/icon-48.png",
         "16": "./assets/icon-16.png"
     },
     "action": {
-        "default_title": "Music Player+",
+        "default_title": "Spotify Player+",
         "default_icon": "./assets/icon-128.png",
         "default_popup": "index.html"
     },

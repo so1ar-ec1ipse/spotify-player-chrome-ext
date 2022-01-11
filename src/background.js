@@ -5,8 +5,8 @@ import { base64urlencode } from "./utils/hash.js";
 // haibeacocpobdaiimnfhjbkiggfacehc
 const REDIRECT_URI = "https://haibeacocpobdaiimnfhjbkiggfacehc.chromiumapp.org/";
 const SCOPE = "user-read-playback-state user-modify-playback-state user-library-modify user-library-read";
-const STATE = uuidv4();
-const CODE_VERIFIER = uuidv4() + uuidv4();
+let STATE = uuidv4();
+let CODE_VERIFIER = uuidv4() + uuidv4();
 let ACCESS_TOKEN = ""; // Access token to perform API reqeusts
 let REFRESH_TOKEN = ""; // Used when access_token gets expired
 
@@ -20,6 +20,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 
 async function Login(sendResponse) {
+
+  STATE = uuidv4();
+  CODE_VERIFIER = uuidv4() + uuidv4();
 
   // Save to storage (Because we need these when requesting access token for security reasons)
   chrome.storage.sync.set({ "state": STATE });
@@ -72,7 +75,6 @@ async function Login(sendResponse) {
 
 // Now when we are logged in, we need to request access token to be able to use Spotify's enpoints
 async function RequestAccessToken(code, sendResponse) {
-
   // Build data for token request
   const data = new URLSearchParams();
   data.append("code", code);
